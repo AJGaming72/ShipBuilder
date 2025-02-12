@@ -13,7 +13,7 @@
 params ["_ship"];
 if !(hasInterface) exitWith {};// Cringe not having an interface
 private _playerShip = player getVariable ["SB_ship", -1];
-if !(_playerShip == _ship) exitWith {}; // Not in the ship
+if (_playerShip isNotEqualTo _ship) exitWith {}; // Not in the ship
 
 private _priority = 1500;
 private _colorCorrectionHandle = -1;
@@ -44,10 +44,10 @@ while {_playerShip isEqualTo _ship} do {
 
     _colorCorrectionhandle ppEffectAdjust _lightsOnEffect;
     _colorCorrectionHandle ppEffectCommit 1;
-    uisleep 2;
+    uiSleep 2;
     _colorCorrectionhandle ppEffectAdjust _lightsOffEffect;
     _colorCorrectionHandle ppEffectCommit 1;
-    uisleep 2;
+    uiSleep 2;
 
     _playerShip = player getVariable "SB_ship";
 };

@@ -19,7 +19,7 @@ params ["_ship", "_thrust", "_rotation"];
 if (_ship getVariable ["SB_isDying",false]) exitWith {systemChat "Ship cannot be controlled: Dying";};// If we are dying, remove ability to control
 
 // if we are going to thrust 
-if !(_thrust == 0) then {
+if (_thrust isNotEqualTo 0) then {
 	private _currentStep = _ship getVariable ["SB_thrustStep", 2]; // 2 is the stop command
 	    private _stepNames = ["Full Reverse", "Reverse", "Halt", "Minimum Speed", "Cruise", "Combat", "Full Ahead"]; // Defining the names for each step
 	private _speedCoefficients = [-0.25, -0.1, 0, 0.1, 0.4, 0.8, 1];
@@ -34,7 +34,7 @@ if !(_thrust == 0) then {
 };
 
 // if we are rotating
-if !(_rotation isEqualTo [0, 0, 0]) then {
+if (_rotation isNotEqualTo [0, 0, 0]) then {
 	private _rotationInput = _ship getVariable ["SB_rotationInput", [0, 0, 0]];
 	_rotationInput = _rotationInput vectorAdd _rotation;
 	{

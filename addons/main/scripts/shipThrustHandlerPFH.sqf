@@ -35,7 +35,7 @@ _ship setVariable ["SB_engineModifier", 1, true]; // 2 is the stop command
 	private _cmd = _ship getVariable ["SB_thrustCommand", 0];
 	private _engineModifier = _ship getVariable ["SB_engineModifier", 1];
 	// If our ship isn't going the commanded speed, move it slightly closer to the correct speed
-	if !(_input == _cmd) then {
+	if (_input isNotEqualTo _cmd) then {
 		private _accel = 0.01;
 		if (_input > _cmd) then {
 			_input = parseNumber ((_input - _accel) toFixed 2); // Prevents floating point errors from occuring

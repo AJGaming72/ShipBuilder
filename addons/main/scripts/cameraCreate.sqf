@@ -66,7 +66,7 @@ _trg setTriggerStatements ["this", "thisTrigger getVariable ""SB_camera"" camera
 	_args params ["_cam", "_actor", "_camOffset"];
 	_cam setPosASL (AGLToASL (_actor modelToWorld _camOffset));
 	_cam setVectorDirAndUp [(vectorDir _actor), (vectorUp _actor)];
-	if !(_cam == SB_activeCam) then {
+	if (_cam isNotEqualTo SB_activeCam) then {
 		[_handle] call CBA_fnc_removePerFrameHandler;
 	};
 },0,[_cam, _actor, _camOffset]] call CBA_fnc_addPerFrameHandler;

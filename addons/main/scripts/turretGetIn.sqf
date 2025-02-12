@@ -40,7 +40,7 @@ if (count (crew _turret) == 0) then {
 	private _handle = [_unit, _user] spawn {
 		private _unit = _this select 0;
 		private _user = _this select 1;
-		waitUntil { sleep 1; !(focusOn == _user); };
+		waitUntil { sleep 1; (focusOn isNotEqualTo _user); };
 		_unit setDamage 1;
 		deleteVehicle _unit;
 	};
