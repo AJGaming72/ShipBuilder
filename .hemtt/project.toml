@@ -2,3 +2,6 @@ name = "Ship Builder"
 author = "Alsomjon"
 prefix = "SB"
 mainprefix = "z"
+
+[hemtt.launch.default]
+presets = ["main"]
