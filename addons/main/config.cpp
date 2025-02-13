@@ -27,6 +27,168 @@ class CfgFactionClasses
 	};
 };
 class CfgVehicles {
+	/*
+		VEHICLES
+	*/
+	class Land_VR_Block_01_F;
+	class Land_VR_Block_02_F;
+	class Land_VR_Block_03_F;
+	class Land_VR_Block_04_F;
+	class Land_VR_Block_05_F;
+	
+	class SB_explosionPoint : Land_VR_Block_01_F {
+		displayName = "Shipbuilder Explosion Point";
+	};
+
+	class SB_hitPoint_01 : Land_VR_Block_01_F {
+		displayName = "ShipBuilder Hitpoint 1";
+		class Attributes {
+			class SB_hitpointType {
+				displayName = "Hitpoint Type";
+				tooltip = "Placeholder for future plans!";
+				property = "SB_hitpointType";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Combo";
+				defaultvalue = "ENGINE";
+				typeName = "STRING";
+				class Values {
+					class ENGINE {name = "Engine"; value = "ENGINE";};
+				};
+			};
+			class SB_hitpointHealth {
+				displayName = "Hitpoint Health";
+				tooltip = "The health of the hitpoint";
+				property = "SB_hitpointHealth";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Edit";
+				defaultvalue = """10000""";
+				
+			};
+		};	
+	};
+	class SB_hitPoint_02 : Land_VR_Block_02_F {
+		displayName = "ShipBuilder Hitpoint 2";
+		class Attributes {
+			class SB_hitpointType {
+				displayName = "Hitpoint Type";
+				tooltip = "Placeholder for future plans!";
+				property = "SB_hitpointType";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Combo";
+				defaultvalue = "ENGINE";
+				typeName = "STRING";
+				class Values {
+					class ENGINE {name = "Engine"; value = "ENGINE";};
+				};
+			};
+			class SB_hitpointHealth {
+				displayName = "Hitpoint Health";
+				tooltip = "The health of the hitpoint";
+				property = "SB_hitpointHealth";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Edit";
+				defaultvalue = """10000""";
+				
+			};
+		};	
+	};
+	class SB_hitPoint_03 : Land_VR_Block_03_F {
+		displayName = "ShipBuilder Hitpoint 3";
+		class Attributes {
+			class SB_hitpointType {
+				displayName = "Hitpoint Type";
+				tooltip = "Placeholder for future plans!";
+				property = "SB_hitpointType";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Combo";
+				defaultvalue = "ENGINE";
+				typeName = "STRING";
+				class Values {
+					class ENGINE {name = "Engine"; value = "ENGINE";};
+				};
+			};
+				class Attributes {
+			class SB_hitpointType {
+				displayName = "Hitpoint Type";
+				tooltip = "Placeholder for future plans!";
+				property = "SB_hitpointType";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Combo";
+				defaultvalue = "ENGINE";
+				typeName = "STRING";
+				class Values {
+					class ENGINE {name = "Engine"; value = "ENGINE";};
+				};
+			};
+			class SB_hitpointHealth {
+				displayName = "Hitpoint Health";
+				tooltip = "The health of the hitpoint";
+				property = "SB_hitpointHealth";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Edit";
+				defaultvalue = """10000""";
+				
+			};
+		};	
+	};
+	class SB_hitPoint_04 : Land_VR_Block_04_F {
+		displayName = "ShipBuilder Hitpoint 4";
+		class Attributes {
+			class SB_hitpointType {
+				displayName = "Hitpoint Type";
+				tooltip = "Placeholder for future plans!";
+				property = "SB_hitpointType";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Combo";
+				defaultvalue = "ENGINE";
+				typeName = "STRING";
+				class Values {
+					class ENGINE {name = "Engine"; value = "ENGINE";};
+				};
+			};
+			class SB_hitpointHealth {
+				displayName = "Hitpoint Health";
+				tooltip = "The health of the hitpoint";
+				property = "SB_hitpointHealth";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Edit";
+				defaultvalue = """10000""";
+				
+			};
+		};	
+		};	
+	};
+	class SB_hitPoint_05 : Land_VR_Block_05_F {
+		displayName = "ShipBuilder Hitpoint 5";
+		class Attributes {
+			class SB_hitpointType {
+				displayName = "Hitpoint Type";
+				tooltip = "Placeholder for future plans!";
+				property = "SB_hitpointType";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Combo";
+				defaultvalue = "ENGINE";
+				typeName = "STRING";
+				class Values {
+					class ENGINE {name = "Engine"; value = "ENGINE";};
+				};
+			};
+			class SB_hitpointHealth {
+				displayName = "Hitpoint Health";
+				tooltip = "The health of the hitpoint";
+				property = "SB_hitpointHealth";
+				expression = "_this setVariable ['%s',_value];";
+				control = "Edit";
+				defaultvalue = """10000""";
+				
+			};
+		};	
+	};
+
+
+	/*
+		MODULES
+	*/
 	class Logic;
 	class Module_F : Logic
 	{
@@ -52,11 +214,12 @@ class CfgVehicles {
 		scope = 2;
 		displayName = "Ship";
 		category = "SB_Modules";
+		function = "SB_fnc_shipSetup";
 
 		isGlobal = 0;
 		isDisposable = 1;
 		class Attributes : AttributesBase {
-			class shipVariableName : Edit {
+			class SB_Module_shipName : Edit {
 				displayName = "Ship Variable Name";
 				tooltip = "This is the name of the Ship Variable. This must be unique if you plan to have multiple ships.";
 				property = "SB_Module_shipName";
@@ -84,22 +247,23 @@ class CfgVehicles {
 	class SB_Module_hangarTrigger : SB_Module_trigger{
 		displayName = "Ship Builder Hangar Trigger";
 		class Attributes : AttributesBase {
-			class ID : Edit {
+			class SB_Module_hangarTriggerID : Edit {
 				property = "SB_Module_hangarTriggerID";
 				displayName = "Trigger ID";
 				tooltip = "Number value, which corresponds with the sister trigger.";
 				typeName = "NUMBER";
+				validate = "number";
 				defaultValue = 1;
 			};
-			class Type : Combo {
+			class SB_Module_triggerType : Combo {
 					property = "SB_Module_triggerType";
 					displayName = "Trigger Type";
 					tooltip = "Where is this trigger placed in relation to the ship?";
 					typeName = "STRING";
 					defaultValue = """INTERIOR""";
 					class Values {
-						class INTERIOR {name = "Hangar Interior"; value = """INTERIOR""";};
-						class EXTERIOR {name = "Hangar Exterior"; value = """EXTERIOR""";};
+						class INTERIOR {name = "Hangar Interior"; value = "INTERIOR";};
+						class EXTERIOR {name = "Hangar Exterior"; value = "EXTERIOR";};
 					};
 			};
 		};
@@ -115,29 +279,20 @@ class CfgVehicles {
 			class ModuleDescription : ModuleDescription {};
 		};
 		class ModuleDescription : ModuleDescription {
-			description = "Testing the module description section";
-			sync[] = {"Anything", "LocationArea_F"};
-			class LocationArea_F
-			{
-				description[] = { // Multi-line descriptions are supported
-					"First line",
-					"Second line"
-				};
-				position = 1;	// Position is taken into effect
-				direction = 1;	// Direction is taken into effect
-				optional = 1;	// Synced entity is optional
-				duplicate = 1;	// Multiple entities of this type can be synced
-				synced[] = { "BluforUnit", "AnyBrain" };	// Pre-defined entities like "AnyBrain" can be used (see the table below)
-			};
-			class BluforUnit
-			{
-				description = "Short description";
-				displayName = "Any BLUFOR unit";	// Custom name
-				icon = "iconMan";					// Custom icon (can be file path or CfgVehicleIcons entry)
-				side = 1;							// Custom side (determines icon color)
-			};
+			description = "
+			This module is used to synchronize turrets, their controller, and the ship. <br/>
+			Synchronize it with the Ship module, the Turret, and the Controller. <br/>
+			If the Controller is not within the interior trigger area it will not work.
+			";
 		};
+	};
+	class SB_Module_shipController : Module_F {
+		scope = 2;
+		displayName = "Turret Module";
+		category = "SB_Modules";
 
+		isGlobal = 0;
+		isDisposable = 1;
 	};
 };
 #include "CfgFunctions.hpp"

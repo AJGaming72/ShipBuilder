@@ -17,7 +17,7 @@ class CfgFunctions {
         class shipCommandMovement {};
         class shipRotationHandler {};
         class shipSetup {};
-        class shipSetupLocal {};
+        class shipControllerSetup {};
         class shipThrustHandlerPFH {};
         class syncParts {};
 
