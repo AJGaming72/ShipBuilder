@@ -288,7 +288,7 @@ class CfgVehicles {
 	};
 	class SB_Module_shipController : Module_F {
 		scope = 2;
-		displayName = "Turret Module";
+		displayName = "Ship controller";
 		category = "SB_Modules";
 
 		isGlobal = 0;

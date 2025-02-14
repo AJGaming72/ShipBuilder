@@ -5,3 +5,4 @@ mainprefix = "z"
 
 [hemtt.launch.default]
 presets = ["main"]
+mission = "SB_Modtest.VR"
