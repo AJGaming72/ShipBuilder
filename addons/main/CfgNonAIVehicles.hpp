@@ -18,7 +18,7 @@ class CfgNonAIVehicles {
         displayName = "Hangar Detector - Exterior";
         class AttributeValues {
             condition = "[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;";
-            onActivation = "[thisTrigger, triggerHangerExterior] call SB_fnc_teleportFromExt;";
+            onActivation = "[thisTrigger, triggerHangerInterior] call SB_fnc_teleportFromExt;";
             size2[]={5,5};
 			size3[]={5,5,5};
 			IsRectangle=1;

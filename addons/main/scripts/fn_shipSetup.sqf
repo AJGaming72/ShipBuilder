@@ -23,11 +23,11 @@ params [
 
 if (!isServer) exitWith {};
 private _ship = "B_Quadbike_01_F" createVehicle [0,0,0];
-private _shipTriggers = {}; // The trigger (or triggers) that define the user as being inside the ship
-private _hangarTriggers = {}; // The triggers that are used to put the player in or out of the ship
-private _turrets = {}; // The modules for turrets
-private _controllers = {}; // The module to link the ship controllers
-private _hitPoints = {}; // The parts used to define hitpoints
+private _shipTriggers = []; // The trigger (or triggers) that define the user as being inside the ship
+private _hangarTriggers = []; // The triggers that are used to put the player in or out of the ship
+private _turrets = []; // The modules for turrets
+private _controllers = []; // The module to link the ship controllers
+private _hitPoints = []; // The parts used to define hitpoints
 private _actorClass = 0; // The ship's actor.
 
 
@@ -58,9 +58,13 @@ _ship allowDamage false;
 
 
 [_ship, 120] call SB_fnc_shipThrustHandlerPFH;
-[_ship, 3] spawn SB_fnc_shipRotationHandler;
+[_ship, 3] spawn SB_fnc_shipRotationHandler; // Change to PFH
 
 {
+	/*
+	Here, we create our trigger
+	Then, we use info from our objects the user placed in the 3den editor to find out how our trigger should be setup.
+	*/
 	// Current result is saved in variable _x
 	private _interiorTrigger = createTrigger ["SB_shipInteriorDetector", _x];
 	private _size = _x getVariable "size3";
@@ -69,9 +73,56 @@ _ship allowDamage false;
 	_interiorTrigger setTriggerArea [_size select 0, _size select 1, _rot, _isRectangle, _size select 2];
 } forEach _shipTriggers;
 
-// This should handle the hitpoints 
-_ship setVariable ["SB_numEngines", 0, true];
 {
+	/*
+	This serves the purpose of making our hangar triggers work.
+	First, we get the necessary info to understand where our trigger should be placed, and its ID so that we can connect it with its sister trigger.
+	Then, we create the trigger, and register its name within the mission namespace.
+	This is the same as if we put its variablename in the 3den editor, and allows us to call for it within the trigger's onActivation area.
+	*/
+	private _triggerID = _x getVariable "SB_Module_hangarTriggerID";
+	private _type = _x getVariable "SB_Module_triggerType";
+	if (_type isEqualTo "INTERIOR") then {
+		private _interiorTriggers = _ship getVariable ["SB_interiorHangarTriggers", []]; 
+		private _interiorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_intHangar" + _triggerID;
+		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + _triggerID;
+
+		if (_name in _interiorTriggers) then {
+			diag_log "Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
+		};
+		private _trigger = createTrigger ["SB_hangarInteriorDetector", _x];
+		_trigger setTriggerActivation ["[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+ _exteriorName +", ship] call SB_fnc_teleportFromInt;",""];
+		missionNamespace setVariable [_name, _trigger];
+		
+	} else {
+		private _exteriorTriggers = _ship getVariable ["SB_exteriorHangarTriggers", []]; 
+		private _interiorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_intHangar" + _triggerID;
+		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + _triggerID;
+
+		if (_name in _interiorTriggers) then {
+			diag_log "Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
+		};
+		private _trigger = createTrigger ["SB_hangarInteriorDetector", _x];
+		_trigger setTriggerActivation ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;",""];
+		missionNamespace setVariable [_name, _trigger];
+	};
+	
+} forEach _hangarTriggers;
+
+{
+	// Current result is saved in variable _x
+	
+} forEach _turrets;
+
+// This should handle the hitpoints 
+_ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our variable outside of the loop so we don't do it every time.
+{
+	/*
+	First, we get all the information about our engines.
+	Then, we update our SB_numEngines variable so that we make certain we remove the right amount of thrust when an engine is destroyed
+	Finally, we register the hitpoint with our function
+	This only accounts for the Engine hitpoint type right now.
+	*/
 	private _engines = _ship getVariable ["SB_numEngines", 0];
 	private _type = _x getVariable ["SB_hitpointType", ""];
 	private _health = _x getVariable ["SB_hitpointHealth", 10000];
@@ -87,6 +138,9 @@ _ship setVariable ["SB_numEngines", 0, true];
 
 
 {
+	/*
+	Run our setup function for each controller on all players, plus those that JIP (Join in Progress)
+	*/
 	// Current result is saved in variable _x
 	[_ship, _x] remoteExecCall ["SB_fnc_shipControllerSetup", 0, true]; // Controller setup for the ship
 } forEach _controllers;
