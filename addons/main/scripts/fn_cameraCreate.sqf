@@ -16,9 +16,9 @@
 
 	Run on player POST INIT
 */
+if !(hasInterface) exitWith {};
 params ["_screen", "_surfaceIndex", "_camera", "_ship"];
 // Creates render surface for camera to render to. Render surface doesn't seem to be a real thing but rather you just create a variable and the game understands how that works. Forum helped me here lol
-if !(hasInterface) exitWith {};
 
 private _actor = _ship getVariable ["SB_shipActor", _ship];
 while {_actor == _ship} do {

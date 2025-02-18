@@ -10,6 +10,7 @@
 
 	Run on player
 */
+if !(hasInterface) exitWith {};
 params ["_ship"];
 player setVariable ["SB_ship", _ship, true];
 if (_ship getVariable ["SB_isDying", false]) then {

@@ -10,6 +10,7 @@
 
 	Run on player
 */
+if !(hasInterface) exitWith {};
 params ["_thisList"];
 if (vehicle player in _thisList) then {
     driver vehicle player isEqualTo player;

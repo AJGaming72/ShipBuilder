@@ -7,15 +7,15 @@
 	_self: The explosion point
 	_ship: The ship object
 	
-	[_self, _ship] call compile preprocessFileLineNumbers 'Scripts\explosionPointRegister.sqf';
+	[_self, _ship] call SB_fnc_explosionPointRegister;
 
 	TODO: 
 
 	Run on server
 	
 */
-params ["_self", "_ship"];
 if (!isServer) exitWith {};
+params ["_self", "_ship"];
 private _arr = _ship getVariable ["SB_explosionPoints", []];
 private _offset = _ship worldToModel ASLToAGL getPosASL _self;
 _arr pushBack _offset;

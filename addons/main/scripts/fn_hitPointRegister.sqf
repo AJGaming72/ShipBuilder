@@ -17,8 +17,8 @@
 	EH Needs to remoteExec inside so it only runs on the server
 	
 */
-params ["_self", "_ship", "_type", "_health"];
 if (!isServer) exitWith {};
+params ["_self", "_ship", "_type", "_health"];
 _self setVariable ["SB_ship", _ship, true];
 _self setVariable ["SB_partHealth", _health, true];
 _self setVariable ["SB_partType", _type, true];
@@ -26,8 +26,6 @@ _self setVariable ["SB_partType", _type, true];
 _self setObjectTextureGlobal [0,""];
 _self setObjectTextureGlobal [1,""];
 
-_self addEventHandler ["HitPart",
-	{
-		[(_this select 0)] call SB_fnc_hitPointRegister_EH;
-	} // No need for semicolon, part of an array.
-];
+[_self, "HitPart", {[(_this select 0)] call SB_fnc_hitPointRegister_EH;}] remoteExecCall ["addEventHandler", 0, true]; 
+// Here, we are making sure that all players have the event handler.
+// "HitPart" EH runs only on the shooters computer. It also works on most static objects. Yay!

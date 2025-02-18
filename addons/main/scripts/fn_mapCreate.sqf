@@ -10,6 +10,7 @@
     Make this work when there are multiple screens. The _id is not going to be friendly to creating multiple (Make it work on just the active ship?)
 	Run on player + JIP (I think?)
 */
+if !(hasInterface) exitWith {};
 params ["_screen", "_ship", ["_dimensions", [1,1]]];
 private _id = "SB_shipMap" + ((_screen call BIS_fnc_netId) regexReplace ["[:]","_"]); // Should give us a unique ID for this screen
 _screen setObjectTexture [0,"#(rgb,1024,1024,1)ui(RscDisplayEmpty," + _id + ")"];
@@ -50,10 +51,12 @@ _screen addAction ["Zoom out",{
 private _alive = _ship getVariable ["SB_alive", false];
 
 _map ctrlAddEventHandler ["Draw", {
-    _this execVM "Scripts\mapDraw.sqf";
+    _this call SB_fnc_mapDraw;
 }];
+
 while {_alive} do {
     displayUpdate _display;
     _alive = _ship getVariable ["SB_alive", false];
     sleep 1;    
-};
+}; 
+// While it is not ideal in many cases to use sleep for timed events, it is superior here, as exact timing is not necessary.

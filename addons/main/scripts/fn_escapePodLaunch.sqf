@@ -12,8 +12,9 @@
 	
 	Run on player
 */
+if (!hasInterface) exitWith {};
 params["_escapePod","_offset","_ship","_actionId"];
 _escapePod setPosASL (AGLToASL (_ship modelToWorld (_offset select 0))); // Convert our offset from model space to world space
 _escapePod setVectorDir (_ship vectorModelToWorld (_offset select 1)); // Convert our direction from model space to world space
 _escapePod setVelocityModelSpace [0, 50, 0]; // Launch the pod with some speed
-//READDAFTERTEST _escapePod removeAction _actionId; // So we can't repeatedly launch the pod
+_escapePod removeAction _actionId; // So we can't repeatedly launch the pod

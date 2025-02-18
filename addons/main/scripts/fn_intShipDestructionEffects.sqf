@@ -10,8 +10,8 @@
 
     Run on player
 */
-params ["_ship"];
 if !(hasInterface) exitWith {};// Cringe not having an interface
+params ["_ship"];
 private _playerShip = player getVariable ["SB_ship", -1];
 if (_playerShip isNotEqualTo _ship) exitWith {}; // Not in the ship
 

@@ -13,10 +13,9 @@
 
 	Run on server
 	
-	###################### NOT MAINTAINED ##################################
 */
-params ["_ship", "_mps"];
 if (!isServer) exitWith {};
+params ["_ship", "_mps"];
 private _interval = 0.1; // This is how often the command should tick
 private _distPerTick = (_interval*_mps); // This calculates how far we would have to travel each tick to move the proper mps
 private _pos = getPosWorld _ship;

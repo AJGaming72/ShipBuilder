@@ -13,8 +13,8 @@
 	
 	Run on server
 */
-params ["_self", "_ship"];
 if (!isServer) exitWith {};
+params ["_self", "_ship"];
 private _arr = _ship getVariable ["SB_intExplosionPoints", []];
 private _pos = getPosASL _self;
 _arr pushBack _pos;

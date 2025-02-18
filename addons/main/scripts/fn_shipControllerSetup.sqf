@@ -12,8 +12,8 @@
 	Run on player
 	
 */
-params ["_ship","_controller"];
 if !(hasInterface) exitWith {};
+params ["_ship","_controller"];
 _controller setVariable ["SB_ship", _ship];
 _controller addAction ["Forward", {
 	params ["_target", "_caller", "_actionId", "_arguments"];

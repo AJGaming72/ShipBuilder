@@ -19,16 +19,17 @@ class CfgFunctions {
         class shipSetup {};
         class shipControllerSetup {};
         class shipThrustHandlerPFH {};
-        class syncParts {};
 
         class turretGetIn {};
         class turretSetup {};
+        class turretSetupLocal {};
         /*
         Functions that didn't make it in
         shipThrustHandlerScheduled
         temp_explosionInitRegister
         temp_intExplosionInitRegister
         postInit
+        syncParts
         */
         };
         class Triggers {

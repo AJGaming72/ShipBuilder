@@ -13,6 +13,7 @@
 
 	Run on player
 */
+if !(hasInterface) exitWith {};
 params ["_self", "_connectedTrigger"];
 private _veh = vehicle player;
 

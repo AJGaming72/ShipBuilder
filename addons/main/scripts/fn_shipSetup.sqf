@@ -4,10 +4,7 @@
 	Handles setting up the ship
 	
 	Arguments:
-	_ship: The ship object
-	_shipActor: The ship object's actor
-	_controller: The object that control the ship
-	
+
 	TODO: 
 	Ship speed and turn rate as attributes on ship module
 
@@ -17,11 +14,11 @@
 */
 params [
 	["_logic", objNull, [objNull]],		// Argument 0 is module logic
-	["_units", [], [[]]],				// Argument 1 is a list of affected units (SYNC'D OBJECTS GO IN HERE!)
+	["_units", [], [[]]],				// Argument 1 is a list of affected units (NOT SYNCH'D OBJECTS)
 	["_activated", true, [true]]		// True when the module was activated, false when it is deactivated (i.e., synced triggers are no longer active)
 ];
-
 if (!isServer) exitWith {};
+private _syncObjectsLogic = synchronizedObjects _logic;
 private _ship = "B_Quadbike_01_F" createVehicle [0,0,0];
 private _shipTriggers = []; // The trigger (or triggers) that define the user as being inside the ship
 private _hangarTriggers = []; // The triggers that are used to put the player in or out of the ship
@@ -29,7 +26,6 @@ private _turrets = []; // The modules for turrets
 private _controllers = []; // The module to link the ship controllers
 private _hitPoints = []; // The parts used to define hitpoints
 private _actorClass = 0; // The ship's actor.
-
 
 {
 	// Current result is saved in variable _x
@@ -47,8 +43,8 @@ private _actorClass = 0; // The ship's actor.
 		case "SB_hitPoint_05": {_hitPoints pushBack _x;};
 		default {_actorClass = typeOf _x;_ship setPosASL (getPosASL _x);deleteVehicle _x;}; // The only vehicle that should be default is the ship's actor from 3den editor.
 	};
-} forEach _units;
-
+	systemChat str (typeOf _x);
+} forEach _syncObjectsLogic;
 if (_actorClass isEqualTo 0) exitWith {systemChat "No ship actor created.";};
 private _shipActor = _actorClass createVehicle (getPos _ship);
 _shipActor attachTo [_ship, [0,0,0]];
@@ -100,7 +96,7 @@ _ship allowDamage false;
 		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + _triggerID;
 
 		if (_name in _interiorTriggers) then {
-			diag_log "Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
+			diag_log "ShipBuilder: Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
 		};
 		private _trigger = createTrigger ["SB_hangarInteriorDetector", _x];
 		_trigger setTriggerActivation ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;",""];
@@ -111,7 +107,20 @@ _ship allowDamage false;
 
 {
 	// Current result is saved in variable _x
-	
+	private _syncObjects = synchronizedObjects _x;
+	_syncObjects deleteAt (_syncObjects find _logic);
+	private _controller = 1;
+	private _turret = 0;
+	if ((count _syncObjects) isNotEqualTo 2) exitWith {diag_log "ShipBuilder: More than 2 objects synchronized to turret module. Abandoning turret setup."};// Error handling
+	{
+		// _x is local to the forEach
+		if ((_syncObjects select 0) inArea _x) exitWith{ 
+			_controller = 0;
+			_turret = 1;
+		}; // Using exitWith allows us to exit the forEach loop, which is slightly more efficient. Using then would just use slightly more time, no change to effect.
+	} forEach _shipTriggers; // Figure out which one is on the interior, allowing us to understand which object is the controller.
+	[(_syncObjects select _controller), (_syncObjects select _turret), _ship] call SB_fnc_turretSetup;
+
 } forEach _turrets;
 
 // This should handle the hitpoints 
@@ -144,4 +153,3 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	// Current result is saved in variable _x
 	[_ship, _x] remoteExecCall ["SB_fnc_shipControllerSetup", 0, true]; // Controller setup for the ship
 } forEach _controllers;
-

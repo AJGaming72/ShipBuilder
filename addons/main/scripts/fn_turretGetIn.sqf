@@ -14,7 +14,7 @@
 
 	Run on player
 */
-
+if !(hasInterface) exitWith {};
 params ["_user", "_turret"];
 // Make certain the turret is not currently controlled by a player
 private _playerControlled = false;
@@ -22,8 +22,8 @@ private _playerControlled = false;
 	if (isPlayer (_x select 0)) then {
 		_playerControlled = true;
 	};
-} forEach fullCrew _turret;
-if _playerControlled exitWith {
+} forEach (fullCrew _turret);
+if (_playerControlled) exitWith {
 	systemChat "Player controlling turret already!"
 };
 // Make the turret be on the correct team

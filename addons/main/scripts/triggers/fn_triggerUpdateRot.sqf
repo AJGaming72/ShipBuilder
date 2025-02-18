@@ -9,8 +9,8 @@
 
 	Run on trigger condition
 */
-params ["_trigger"];
 if (!isServer) exitWith {};
+params ["_trigger"];
 private _triggerDefRot = _trigger getVariable ["SB_triggerDefRot", -1];
 private _triggerArea = triggerArea _trigger;
 if (_triggerDefRot < 0) then {

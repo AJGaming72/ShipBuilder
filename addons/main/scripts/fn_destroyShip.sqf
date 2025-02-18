@@ -10,8 +10,9 @@
 
     Run on server
 */
-params ["_ship"];
 if (!isServer) exitWith {};
+params ["_ship"];
+if (_ship getVariable ["SB_isDying", false]) exitWith {diag_log "Shipbuilder: Multiple ship destruction instances detected."};
 _ship setVariable ["SB_thrustCommand", 0.05, true];
 _ship setVariable ["SB_rotationInput", [0, -0.25, 0], true];
 _ship setVariable ["SB_isDying", true, true];
@@ -19,7 +20,7 @@ _ship setVariable ["SB_engineModifier", 1, true];
 private _explosionPoints = _ship getVariable ["SB_explosionPoints", []];
 private _intExplosionPoints = _ship getVariable ["SB_intExplosionPoints", []];
 
-[_ship] execVM "Scripts\intShipDestructionEffects.sqf"; // Should be called on ALL machines
+[_ship] remoteExec ["SB_fnc_intShipDestructionEffects", 0, true]; // Should be called on all clients in a scheduled environment
 
 _ship setVariable ["SB_Fires", [], true];
 

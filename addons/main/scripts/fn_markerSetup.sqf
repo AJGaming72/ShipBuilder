@@ -9,6 +9,7 @@
 	TODO: 
 	Run on server
 */
+if !(isServer) exitWith {};
 params ["_ship"];
 private _id = "SB_shipMarker" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]); // Should give us a unique ID for this marker
 private _marker = createMarker [_id, position _ship]; 

@@ -13,6 +13,7 @@
 
 	Run on player
 */
+if !(hasInterface) exitWith {};
 params ["_self", "_connectedTrigger", "_ship"];
 private _triggerCone = _self getVariable ["SB_triggerCone", -1];
 private _triggerArea = triggerArea _self;
