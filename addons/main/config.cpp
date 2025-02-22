@@ -217,7 +217,6 @@ class CfgVehicles {
 		function = "SB_fnc_shipSetup";
 
 		isGlobal = 0;
-		isDisposable = 1;
 		class Attributes : AttributesBase {
 			class SB_Module_shipName : Edit {
 				displayName = "Ship Variable Name";

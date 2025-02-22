@@ -43,9 +43,8 @@ private _actorClass = 0; // The ship's actor.
 		case "SB_hitPoint_05": {_hitPoints pushBack _x;};
 		default {_actorClass = typeOf _x;_ship setPosASL (getPosASL _x);deleteVehicle _x;}; // The only vehicle that should be default is the ship's actor from 3den editor.
 	};
-	systemChat str (typeOf _x);
 } forEach _syncObjectsLogic;
-if (_actorClass isEqualTo 0) exitWith {systemChat "No ship actor created.";};
+if (_actorClass isEqualTo 0) exitWith {diag_log "[SB] No ship actor created.";};
 private _shipActor = _actorClass createVehicle (getPos _ship);
 _shipActor attachTo [_ship, [0,0,0]];
 _ship setVariable ["SB_shipActor", _shipActor, false]; // We create the vehicle locally because really there's no reason to have it not be local, should be slightly better performance wise. Might be unnecessary.
@@ -63,10 +62,8 @@ _ship allowDamage false;
 	*/
 	// Current result is saved in variable _x
 	private _interiorTrigger = createTrigger ["SB_shipInteriorDetector", _x];
-	private _size = _x getVariable "size3";
-	private _rot = getDir _x;
-	private _isRectangle = _x getVariable "IsRectangle";
-	_interiorTrigger setTriggerArea [_size select 0, _size select 1, _rot, _isRectangle, _size select 2];
+	private _area = _x getVariable "objectArea";
+	_interiorTrigger setTriggerArea _area;
 } forEach _shipTriggers;
 
 {
@@ -87,6 +84,8 @@ _ship allowDamage false;
 			diag_log "Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
 		};
 		private _trigger = createTrigger ["SB_hangarInteriorDetector", _x];
+		private _area = _x getVariable "objectArea";
+		_trigger setTriggerArea _area;
 		_trigger setTriggerActivation ["[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+ _exteriorName +", ship] call SB_fnc_teleportFromInt;",""];
 		missionNamespace setVariable [_name, _trigger];
 		
@@ -96,9 +95,11 @@ _ship allowDamage false;
 		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + _triggerID;
 
 		if (_name in _interiorTriggers) then {
-			diag_log "ShipBuilder: Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
+			diag_log "[SB] Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
 		};
 		private _trigger = createTrigger ["SB_hangarInteriorDetector", _x];
+		private _area = _x getVariable "objectArea";
+		_trigger setTriggerArea _area;
 		_trigger setTriggerActivation ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;",""];
 		missionNamespace setVariable [_name, _trigger];
 	};
@@ -111,7 +112,7 @@ _ship allowDamage false;
 	_syncObjects deleteAt (_syncObjects find _logic);
 	private _controller = 1;
 	private _turret = 0;
-	if ((count _syncObjects) isNotEqualTo 2) exitWith {diag_log "ShipBuilder: More than 2 objects synchronized to turret module. Abandoning turret setup."};// Error handling
+	if ((count _syncObjects) isNotEqualTo 2) exitWith {diag_log "[SB] More than 2 objects synchronized to turret module. Abandoning turret setup."};// Error handling
 	{
 		// _x is local to the forEach
 		if ((_syncObjects select 0) inArea _x) exitWith{ 
@@ -151,5 +152,9 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	Run our setup function for each controller on all players, plus those that JIP (Join in Progress)
 	*/
 	// Current result is saved in variable _x
-	[_ship, _x] remoteExecCall ["SB_fnc_shipControllerSetup", 0, true]; // Controller setup for the ship
+	private _syncObjects = synchronizedObjects _x;
+	_syncObjects deleteAt (_syncObjects find _logic); // This should mean we only have one item in our array, the ship controller.
+	// Error handling. I could just make it loop through, but that adds complexity where I don't want it.
+	if (count _syncObjects > 1) then {diag_log "[SB] Multiple controller objects attached to one controller module. Defaulting to first item in array.";};
+	[_ship, (_syncObjects select 0)] remoteExecCall ["SB_fnc_shipControllerSetup", 0, true]; // Controller setup for the ship
 } forEach _controllers;

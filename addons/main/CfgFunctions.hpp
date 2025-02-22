@@ -23,6 +23,7 @@ class CfgFunctions {
         class turretGetIn {};
         class turretSetup {};
         class turretSetupLocal {};
+
         /*
         Functions that didn't make it in
         shipThrustHandlerScheduled
