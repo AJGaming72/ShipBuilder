@@ -14,6 +14,7 @@
 	Run on player
 */
 if !(hasInterface) exitWith {};
+systemChat "Entered interior loop.";
 params ["_self", "_connectedTrigger", "_ship"];
 private _triggerCone = _self getVariable ["SB_triggerCone", -1];
 private _triggerArea = triggerArea _self;
@@ -26,9 +27,6 @@ private _height = _triggerArea select 4;
 if (_triggerCone < 0) then { 
     // We are getting the angle from the centerpoint out to the corners of the trigger, like if you were to draw an X in the middle of the trigger
     // This lets will let us see if the user exited in a direction within this range, effectively letting us see which side they exited from.
-   
-
-    
     _triggerCone = acos ((_width^2 - _length^2)/(_width^2 + _length^2));
     _self setVariable ["SB_triggerCone", _triggerCone, true];
 };

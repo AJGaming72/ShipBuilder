@@ -63,6 +63,7 @@ _ship allowDamage false;
 	// Current result is saved in variable _x
 	private _interiorTrigger = createTrigger ["SB_shipInteriorDetector", _x];
 	private _area = _x getVariable "objectArea";
+	_interiorTrigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
 	_interiorTrigger setTriggerArea _area;
 } forEach _shipTriggers;
 
@@ -77,8 +78,8 @@ _ship allowDamage false;
 	private _type = _x getVariable "SB_Module_triggerType";
 	if (_type isEqualTo "INTERIOR") then {
 		private _interiorTriggers = _ship getVariable ["SB_interiorHangarTriggers", []]; 
-		private _interiorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_intHangar" + _triggerID;
-		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + _triggerID;
+		private _interiorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_intHangar" + str _triggerID;
+		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + str _triggerID;
 
 		if (_name in _interiorTriggers) then {
 			diag_log "Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
@@ -86,22 +87,25 @@ _ship allowDamage false;
 		private _trigger = createTrigger ["SB_hangarInteriorDetector", _x];
 		private _area = _x getVariable "objectArea";
 		_trigger setTriggerArea _area;
-		_trigger setTriggerActivation ["[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+ _exteriorName +", ship] call SB_fnc_teleportFromInt;",""];
-		missionNamespace setVariable [_name, _trigger];
+		_trigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
+		_trigger setTriggerStatements ["[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+ _exteriorName +", ship] call SB_fnc_teleportFromInt;",""];
+		missionNamespace setVariable [_interiorName, _trigger];
 		
 	} else {
 		private _exteriorTriggers = _ship getVariable ["SB_exteriorHangarTriggers", []]; 
-		private _interiorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_intHangar" + _triggerID;
-		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + _triggerID;
+		private _interiorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_intHangar" + str _triggerID;
+		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + str _triggerID;
 
-		if (_name in _interiorTriggers) then {
+		if (_name in _exteriorTriggers) then {
 			diag_log "[SB] Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
 		};
-		private _trigger = createTrigger ["SB_hangarInteriorDetector", _x];
+		private _trigger = createTrigger ["SB_hangarExteriorDetector", _x];
 		private _area = _x getVariable "objectArea";
+		systemChat str _area;
 		_trigger setTriggerArea _area;
-		_trigger setTriggerActivation ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;",""];
-		missionNamespace setVariable [_name, _trigger];
+		_trigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
+		_trigger setTriggerStatements ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;", ""];
+		missionNamespace setVariable [_exteriorName, _trigger];
 	};
 	
 } forEach _hangarTriggers;

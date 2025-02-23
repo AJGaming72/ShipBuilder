@@ -12,6 +12,6 @@
 */
 if !(hasInterface) exitWith {};
 params ["_thisList"];
-if (vehicle player in _thisList) then {
+if (vehicle player in _thisList) exitWith {
     driver vehicle player isEqualTo player;
 };
