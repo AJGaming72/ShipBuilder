@@ -23,6 +23,8 @@ _self setVariable ["SB_ship", _ship, true];
 _self setVariable ["SB_partHealth", _health, true];
 _self setVariable ["SB_partType", _type, true];
 [_self, _ship] call BIS_fnc_attachToRelative;
+_self setObjectTextureGlobal [0,""];
+_self setObjectTextureGlobal [1,""];
 _self setObjectMaterialGlobal [0,""];
 _self setObjectMaterialGlobal [1,""];
 [{_self addEventHandler ["HitPart", {[(_this select 0)] call SB_fnc_hitPointRegister_EH;}]}] remoteExecCall ["call", 0, true];

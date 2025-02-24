@@ -104,7 +104,6 @@ _ship allowDamage false;
 		_trigger setPosASL (getPosASL _x);
 		[_trigger, _ship] call BIS_fnc_attachToRelative;
 		private _area = _x getVariable "objectArea";
-		systemChat str _exteriorName;
 		_trigger setTriggerArea _area;
 		_trigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
 		_trigger setTriggerStatements ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;", ""];

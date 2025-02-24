@@ -8,10 +8,6 @@ class CfgPatches {
 		url = "https://github.com/AJGaming72/ShipBuilder";
 
 		units[] = {
-			"SB_hangarInteriorDetector",
-			"SB_hangarExteriorDetector",
-			"SB_shipInteriorDetector",
-			"SB_triggerModule",
 			"SB_shipModule"
 		};
 		weapons[] = {};
@@ -291,5 +287,4 @@ class CfgVehicles {
 	};
 };
 #include "CfgFunctions.hpp"
-#include "CfgNonAIVehicles.hpp"
 
