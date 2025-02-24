@@ -49,7 +49,7 @@ class CfgVehicles {
 				property = "SB_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
-				defaultvalue = "ENGINE";
+				defaultValue = """ENGINE""";
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
@@ -61,7 +61,9 @@ class CfgVehicles {
 				property = "SB_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
-				defaultvalue = """10000""";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = "10000";
 				
 			};
 		};	
@@ -75,7 +77,7 @@ class CfgVehicles {
 				property = "SB_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
-				defaultvalue = "ENGINE";
+				defaultValue = """ENGINE""";
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
@@ -87,7 +89,9 @@ class CfgVehicles {
 				property = "SB_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
-				defaultvalue = """10000""";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = "10000";
 				
 			};
 		};	
@@ -101,20 +105,7 @@ class CfgVehicles {
 				property = "SB_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
-				defaultvalue = "ENGINE";
-				typeName = "STRING";
-				class Values {
-					class ENGINE {name = "Engine"; value = "ENGINE";};
-				};
-			};
-				class Attributes {
-			class SB_hitpointType {
-				displayName = "Hitpoint Type";
-				tooltip = "Placeholder for future plans!";
-				property = "SB_hitpointType";
-				expression = "_this setVariable ['%s',_value];";
-				control = "Combo";
-				defaultvalue = "ENGINE";
+				defaultValue = """ENGINE""";
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
@@ -126,7 +117,9 @@ class CfgVehicles {
 				property = "SB_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
-				defaultvalue = """10000""";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = "10000";
 				
 			};
 		};	
@@ -140,7 +133,7 @@ class CfgVehicles {
 				property = "SB_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
-				defaultvalue = "ENGINE";
+				defaultValue = """ENGINE""";
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
@@ -152,10 +145,11 @@ class CfgVehicles {
 				property = "SB_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
-				defaultvalue = """10000""";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = "10000";
 				
 			};
-		};	
 		};	
 	};
 	class SB_hitPoint_05 : Land_VR_Block_05_F {
@@ -167,7 +161,7 @@ class CfgVehicles {
 				property = "SB_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
-				defaultvalue = "ENGINE";
+				defaultValue = """ENGINE""";
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
@@ -179,7 +173,9 @@ class CfgVehicles {
 				property = "SB_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
-				defaultvalue = """10000""";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = "10000";
 				
 			};
 		};	

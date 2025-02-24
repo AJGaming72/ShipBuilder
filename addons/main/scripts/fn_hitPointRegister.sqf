@@ -23,9 +23,8 @@ _self setVariable ["SB_ship", _ship, true];
 _self setVariable ["SB_partHealth", _health, true];
 _self setVariable ["SB_partType", _type, true];
 [_self, _ship] call BIS_fnc_attachToRelative;
-_self setObjectTextureGlobal [0,""];
-_self setObjectTextureGlobal [1,""];
-
-[_self, "HitPart", {[(_this select 0)] call SB_fnc_hitPointRegister_EH;}] remoteExecCall ["addEventHandler", 0, true]; 
+_self setObjectMaterialGlobal [0,""];
+_self setObjectMaterialGlobal [1,""];
+[{_self addEventHandler ["HitPart", {[(_this select 0)] call SB_fnc_hitPointRegister_EH;}]}] remoteExecCall ["call", 0, true];
 // Here, we are making sure that all players have the event handler.
 // "HitPart" EH runs only on the shooters computer. It also works on most static objects. Yay!

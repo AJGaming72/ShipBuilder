@@ -22,9 +22,9 @@ private _health = _target getVariable ["SB_partHealth", 0];
 _health = _health - _damage;
 _target setVariable ["SB_partHealth", _health, true];
 if (_health <= 0) then {
-	private _type = _target getVariable ["SB_partType", ""];
+	private _type = _target getVariable ["SB_partType", ""]; // Part type is always uppercase.
 	switch (_type) do {
-		case "engine": {
+		case "ENGINE": {
 			private _engineModifier = _ship getVariable ["SB_engineModifier", 1];
 			private _numEngines = _ship getVariable ["SB_numEngines", 1];
 			_ship setVariable ["SB_engineModifier", (_engineModifier - (1 / _numEngines)), true]; 
