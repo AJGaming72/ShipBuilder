@@ -8,7 +8,6 @@
 	TODO: 
 	Ship speed and turn rate as attributes on ship module
 
-
 	Run on server
 	
 */
@@ -61,7 +60,8 @@ _ship allowDamage false;
 	Then, we use info from our objects the user placed in the 3den editor to find out how our trigger should be setup.
 	*/
 	// Current result is saved in variable _x
-	private _interiorTrigger = createTrigger ["SB_shipInteriorDetector", _x];
+	private _interiorTrigger = createTrigger ["EmptyDetector", [0,0,0]];
+	_interiorTrigger setPosASL (getPosASL _x); // We setPosASL after instead of setting pos here to avoid an unusual issue with height not being set properly.
 	private _area = _x getVariable "objectArea";
 	_interiorTrigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
 	_interiorTrigger setTriggerArea _area;
@@ -84,11 +84,12 @@ _ship allowDamage false;
 		if (_name in _interiorTriggers) then {
 			diag_log "Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
 		};
-		private _trigger = createTrigger ["SB_hangarInteriorDetector", _x];
+		private _trigger = createTrigger ["EmptyDetector", [0,0,0]]; // We setPosASL after instead of setting pos here to avoid an unusual issue with height not being set properly.
+		_trigger setPosASL (getPosASL _x);
 		private _area = _x getVariable "objectArea";
 		_trigger setTriggerArea _area;
 		_trigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
-		_trigger setTriggerStatements ["[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+ _exteriorName +", ship] call SB_fnc_teleportFromInt;",""];
+		_trigger setTriggerStatements ["[thisList] call SB_fnc_detectPlayerVehicle;","","[thisTrigger,"+ _exteriorName +", ship] call SB_fnc_teleportFromInt;"];
 		missionNamespace setVariable [_interiorName, _trigger];
 		
 	} else {
@@ -99,9 +100,11 @@ _ship allowDamage false;
 		if (_name in _exteriorTriggers) then {
 			diag_log "[SB] Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
 		};
-		private _trigger = createTrigger ["SB_hangarExteriorDetector", _x];
+		private _trigger = createTrigger ["EmptyDetector", [0,0,0]]; // We setPosASL after instead of setting pos here to avoid an unusual issue with height not being set properly.
+		_trigger setPosASL (getPosASL _x);
+		[_trigger, _ship] call BIS_fnc_attachToRelative;
 		private _area = _x getVariable "objectArea";
-		systemChat str _area;
+		systemChat str _exteriorName;
 		_trigger setTriggerArea _area;
 		_trigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
 		_trigger setTriggerStatements ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;", ""];
