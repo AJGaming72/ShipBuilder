@@ -24,6 +24,8 @@ private _hangarTriggers = []; // The triggers that are used to put the player in
 private _turrets = []; // The modules for turrets
 private _controllers = []; // The module to link the ship controllers
 private _hitPoints = []; // The parts used to define hitpoints
+private _maps = []; // Defines the map objects
+private _cameras = [];
 private _actorClass = 0; // The ship's actor.
 
 {
@@ -34,6 +36,8 @@ private _actorClass = 0; // The ship's actor.
 		case "SB_Module_hangarTrigger": {_hangarTriggers pushBack _x};
 		case "SB_Module_turret": {_turrets pushBack _x;};
 		case "SB_Module_shipController": {_controllers pushBack _x;};
+		case "SB_module_map": {_maps pushBack _x;};
+		case "SB_module_camera": {_cameras pushBack _x;};
 		// Hitpoints!
 		case "SB_hitPoint_01": {_hitPoints pushBack _x;};
 		case "SB_hitPoint_02": {_hitPoints pushBack _x;};
@@ -46,13 +50,13 @@ private _actorClass = 0; // The ship's actor.
 if (_actorClass isEqualTo 0) exitWith {diag_log "[SB] No ship actor created.";};
 private _shipActor = _actorClass createVehicle (getPos _ship);
 _shipActor attachTo [_ship, [0,0,0]];
+_ship enableSimulationGlobal false;
 _ship setVariable ["SB_shipActor", _shipActor, false]; // We create the vehicle locally because really there's no reason to have it not be local, should be slightly better performance wise. Might be unnecessary.
 _ship setVariable ["SB_alive", true, true];
 _ship allowDamage false;
 
 
-[_ship, 120] call SB_fnc_shipThrustHandlerPFH;
-[_ship, 3] spawn SB_fnc_shipRotationHandler; // Change to PFH
+
 
 {
 	/*
@@ -164,3 +168,43 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	if (count _syncObjects > 1) then {diag_log "[SB] Multiple controller objects attached to one controller module. Defaulting to first item in array.";};
 	[_ship, (_syncObjects select 0)] remoteExecCall ["SB_fnc_shipControllerSetup", 0, true]; // Controller setup for the ship
 } forEach _controllers;
+
+{
+	// screen ship selection dimensions
+	// Current result is saved in variable _x
+	private _syncObjects = synchronizedObjects _x;
+	_syncObjects deleteAt (_syncObjects find _logic); // This should mean we only have one item in our array, the ship controller.
+	if (count _syncObjects > 1) then {diag_log "[SB] Multiple map objects attached to one map module. Defaulting to first item in array.";};
+	private _dimensions = [(_x getVariable "SB_module_mapX"),(_x getVariable "SB_module_mapY")];
+	private _selectionID = _x getVariable "SB_module_selectionID";
+	[(_syncObjects select 0), _ship, _selectionID, _dimensions] remoteExec ["SB_fnc_mapCreate", 0, true];
+} forEach _maps;
+
+// At some point, adding multiple cameras will make sense. For now it doesn't.
+// {
+
+private _cam = _cameras select 0;
+private _selectionID = _cam getVariable "SB_module_selectionID";
+private _syncObjects = synchronizedObjects _cam;
+_syncObjects deleteAt (_syncObjects find _logic);
+private _screen = 1;
+private _cam = 0;
+if ((count _syncObjects) isNotEqualTo 2) exitWith {diag_log "[SB] More than 2 objects synchronized to camera module. Abandoning Camera setup."};// Error handling
+{
+	if ((_syncObjects select 0) inArea _x) exitWith{ 
+		_screen = 0;
+		_cam = 1;
+	}; // Using exitWith allows us to exit the forEach loop, which is slightly more efficient. Using then would just use slightly more time, no change to effect.
+} forEach _shipTriggers;
+// screen, _selectionID, camera, ship;
+sleep 1; // The camera needs time for other stuff to initialize first.
+[(_syncObjects select _screen),_selectionID, (_syncObjects select _cam),_ship ] remoteExec ["SB_fnc_cameraCreate", 0, true];
+
+
+	
+// } forEach _cameras;
+
+// This way nothing gets thrown off in the loading process.
+_ship enableSimulationGlobal true;
+[_ship, 120] call SB_fnc_shipThrustHandlerPFH;
+[_ship, 3] spawn SB_fnc_shipRotationHandler; // Change to PFH

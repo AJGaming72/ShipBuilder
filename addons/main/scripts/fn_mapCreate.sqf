@@ -7,13 +7,14 @@
 	_screen: The screen object to display on
 	
 	TODO: 
-    Make this work when there are multiple screens. The _id is not going to be friendly to creating multiple (Make it work on just the active ship?)
-	Run on player + JIP (I think?)
+
+
+	Run on player + JIP
 */
 if !(hasInterface) exitWith {};
-params ["_screen", "_ship", ["_dimensions", [1,1]]];
+params ["_screen", "_ship",  "_selection", "_dimensions"];
 private _id = "SB_shipMap" + ((_screen call BIS_fnc_netId) regexReplace ["[:]","_"]); // Should give us a unique ID for this screen
-_screen setObjectTexture [0,"#(rgb,1024,1024,1)ui(RscDisplayEmpty," + _id + ")"];
+_screen setObjectTexture [_selection,"#(rgb,1024,1024,1)ui(RscDisplayEmpty," + _id + ")"];
 waitUntil { !isNull (findDisplay _id);};
 private _display = findDisplay _id;
 

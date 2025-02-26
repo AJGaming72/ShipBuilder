@@ -279,11 +279,63 @@ class CfgVehicles {
 	};
 	class SB_Module_shipController : Module_F {
 		scope = 2;
-		displayName = "Ship controller";
+		displayName = "Ship Controller";
 		category = "SB_Modules";
 
 		isGlobal = 0;
 		isDisposable = 1;
+	};
+	class SB_module_map : Module_F {
+		scope = 2;
+		displayName = "Ship Map";
+		category = "SB_Modules";
+
+		isGlobal = 0;
+		isDisposable = 1;
+		class Attributes : AttributesBase {
+			class SB_module_mapX : Edit {
+				property = "SB_module_mapX";
+				displayName = "Map Dimensions X";
+				tooltip = "The X dimension of a map. Only use if your surface isn't 1:1";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = 1;
+			};
+			class SB_module_mapY : Edit {
+				property = "SB_module_mapY";
+				displayName = "Map Dimensions Y";
+				tooltip = "The Y dimension of a map. Only use if your surface isn't 1:1";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = 1;
+			};
+			class SB_module_selectionID : Edit {
+				property = "SB_module_selectionID";
+				displayName = "Selection ID";
+				tooltip = "Which hidden selection should the map be put on?";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = 0;
+			};
+		};
+	};
+	class SB_module_camera : Module_F {
+		scope = 2;
+		displayName = "Ship Camera";
+		category = "SB_Modules";
+
+		isGlobal = 0;
+		isDisposable = 1;
+		class Attributes : AttributesBase {
+			class SB_module_selectionID : Edit {
+				property = "SB_module_selectionID";
+				displayName = "Selection ID";
+				tooltip = "Which hidden selection should the map be put on?";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = 0;
+			};
+		};
 	};
 };
 #include "CfgFunctions.hpp"

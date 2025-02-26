@@ -5,7 +5,7 @@
 	
 	Arguments:
 	_screen: The screen object to display on
-	_surfaceIndex: The texture index used to display on the screen
+	_selectionID: The texture index used to display on the screen
 	_camera: The object used to show the place and direction of a camera
 	
 	TODO: 
@@ -14,15 +14,16 @@
 	Move the camera in a more clean way with the ship
 	Interval from a CBA setting
 
-	Run on player POST INIT
+	Run on player
 */
 if !(hasInterface) exitWith {};
-params ["_screen", "_surfaceIndex", "_camera", "_ship"];
+params ["_screen", "_selectionID", "_camera", "_ship"];
 // Creates render surface for camera to render to. Render surface doesn't seem to be a real thing but rather you just create a variable and the game understands how that works. Forum helped me here lol
 
 private _actor = _ship getVariable ["SB_shipActor", _ship];
 while {_actor == _ship} do {
 	_actor = _ship getVariable ["SB_shipActor", _ship];
+	sleep 1;
 }; // We are waiting until we actually get the ship object. It might take some time to instantiate.
 
 // IMPORTANT!!!
@@ -30,7 +31,7 @@ while {_actor == _ship} do {
 // Good: "#(argb,512,512,1)r2t(sbrtactivecam,1)"
 // Bad: "#(argb, 512, 512, 1)r2t(sbrtactivecam, 1)"
 // This took so much longer than I want to admit to figure out.
-_screen setObjectTexture [_surfaceIndex, "#(argb,512,512,1)r2t(sbrtactivecam,1)"]; 
+_screen setObjectTexture [_selectionID, "#(argb,512,512,1)r2t(sbrtactivecam,1)"]; 
 
 // Create our camera
 private _cam = "camera" camCreate [0, 0, 0];
