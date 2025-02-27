@@ -17,9 +17,8 @@
 if !(hasInterface) exitWith {};
 params ["_self", "_escapePod", "_ship"];
 private _offset = [(_ship worldToModel ASLToAGL getPosASL _self), _ship vectorWorldToModel (vectorDir _self) ];
-_escapePod addAction ["Launch Escape Pod",
-	{
-		params ["_target", "_caller", "_actionId", "_arguments"];
-		[_target, (_arguments select 0),(_arguments select 1),_actionId] execVM "Scripts\escapePodLaunch.sqf";
-	}, [_offset, _ship]];
+[{_escapePod addAction ["Launch Escape Pod",{
+	params ["_target", "_caller", "_actionId", "_arguments"];
+	[_target, (_arguments select 0),(_arguments select 1),_actionId] call SB_fnc_escapePodLaunch;
+}, [_offset, _ship]];}] remoteExecCall ["call", 0, true];
 deleteVehicle _self;

@@ -19,25 +19,30 @@ params [
 if (!isServer) exitWith {};
 private _syncObjectsLogic = synchronizedObjects _logic;
 private _ship = "B_Quadbike_01_F" createVehicle [0,0,0];
-private _shipTriggers = []; // The trigger (or triggers) that define the user as being inside the ship
+private _shipTriggersLogic = []; // The trigger (or triggers) that define the user as being inside the ship
 private _hangarTriggers = []; // The triggers that are used to put the player in or out of the ship
 private _turrets = []; // The modules for turrets
 private _controllers = []; // The module to link the ship controllers
 private _hitPoints = []; // The parts used to define hitpoints
 private _maps = []; // Defines the map objects
 private _cameras = [];
+private _escapePods = [];
+private _explosionPoints = [];
 private _actorClass = 0; // The ship's actor.
 
 {
 	// Current result is saved in variable _x
 	switch (typeOf _x) do {
 		// Here, we are putting each of the modules into their respective arrays so we can handle them accordingly.
-		case "SB_Module_trigger": {_shipTriggers pushBack _x}; 
+		case "SB_Module_trigger": {_shipTriggersLogic pushBack _x}; 
 		case "SB_Module_hangarTrigger": {_hangarTriggers pushBack _x};
 		case "SB_Module_turret": {_turrets pushBack _x;};
 		case "SB_Module_shipController": {_controllers pushBack _x;};
 		case "SB_module_map": {_maps pushBack _x;};
 		case "SB_module_camera": {_cameras pushBack _x;};
+		case "SB_module_escapePod": {_escapePods pushBack _x;};
+		// Explosion Point
+		case "SB_explosionPoint": {_explosionPoints pushBack _x;};
 		// Hitpoints!
 		case "SB_hitPoint_01": {_hitPoints pushBack _x;};
 		case "SB_hitPoint_02": {_hitPoints pushBack _x;};
@@ -55,9 +60,12 @@ _ship setVariable ["SB_shipActor", _shipActor, false]; // We create the vehicle 
 _ship setVariable ["SB_alive", true, true];
 _ship allowDamage false;
 
+private _shipName = _logic getVariable "SB_Module_shipName";
+if (_shipName isEqualTo "") exitWith {diag_log "[SB] No ship name."};
+missionNamespace setVariable [_shipName, _ship];
 
 
-
+private _shipTriggers = [];
 {
 	/*
 	Here, we create our trigger
@@ -68,8 +76,10 @@ _ship allowDamage false;
 	_interiorTrigger setPosASL (getPosASL _x); // We setPosASL after instead of setting pos here to avoid an unusual issue with height not being set properly.
 	private _area = _x getVariable "objectArea";
 	_interiorTrigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
+	_interiorTrigger setTriggerStatements ["vehicle player in thisList;","player setVariable ['SB_ship', " + _shipName + ", true];", "player setVariable ['SB_ship', -1, true];"];
 	_interiorTrigger setTriggerArea _area;
-} forEach _shipTriggers;
+	_shipTriggers pushBack _interiorTrigger;
+} forEach _shipTriggersLogic;
 
 {
 	/*
@@ -93,7 +103,7 @@ _ship allowDamage false;
 		private _area = _x getVariable "objectArea";
 		_trigger setTriggerArea _area;
 		_trigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
-		_trigger setTriggerStatements ["[thisList] call SB_fnc_detectPlayerVehicle;","","[thisTrigger,"+ _exteriorName +", ship] call SB_fnc_teleportFromInt;"];
+		_trigger setTriggerStatements ["[thisList] call SB_fnc_detectPlayerVehicle;","","[thisTrigger,"+ _exteriorName +", " + _shipName + "] call SB_fnc_teleportFromInt;"];
 		missionNamespace setVariable [_interiorName, _trigger];
 		
 	} else {
@@ -180,6 +190,40 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	[(_syncObjects select 0), _ship, _selectionID, _dimensions] remoteExec ["SB_fnc_mapCreate", 0, true];
 } forEach _maps;
 
+
+{
+	private _syncObjects = synchronizedObjects _x;
+	private _escapePod = 1;
+	private _pointMarker = 0;
+	{
+		if ((_syncObjects select 0) inArea _x) exitWith{ 
+			_escapePod = 0;
+			_pointMarker = 1;
+		}; // Using exitWith allows us to exit the forEach loop, which is slightly more efficient. Using then would just use slightly more time, no change to effect.
+	} forEach _shipTriggers;
+	// params ["_self", "_escapePod", "_ship"];
+	[(_syncObjects select _pointMarker),(_syncObjects select _escapePod), _ship] call SB_fnc_escapePodRegister;
+} forEach _escapePods;
+
+
+{
+	// Current result is saved in variable _x
+	private _explosionPoint = _x;
+	_explosionPoint setVariable ["SB_interior", false];
+	{
+		if (_explosionPoint inArea _x) exitWith { 
+			_explosionPoint setVariable ["SB_interior", true];
+		};
+	} forEach _shipTriggers;
+	// We seperate these so we don't get the case that it is not in one array, but in the other, and gets misrepresented as exterior.
+
+	if (_explosionPoint getVariable "SB_interior") then {
+		[_explosionPoint, _ship] call SB_fnc_intExplosionPointRegister; systemChat str _x;
+	} else {
+		[_explosionPoint, _ship] call SB_fnc_explosionPointRegister; systemChat str _x;
+	};
+	systemChat str _x;
+} forEach _explosionPoints;
 // At some point, adding multiple cameras will make sense. For now it doesn't.
 // {
 

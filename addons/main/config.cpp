@@ -31,8 +31,9 @@ class CfgVehicles {
 	class Land_VR_Block_03_F;
 	class Land_VR_Block_04_F;
 	class Land_VR_Block_05_F;
-	
-	class SB_explosionPoint : Land_VR_Block_01_F {
+	class Land_VR_Shape_01_cube_1m_F;
+
+	class SB_explosionPoint : Land_VR_Shape_01_cube_1m_F {
 		displayName = "Shipbuilder Explosion Point";
 	};
 
@@ -49,6 +50,7 @@ class CfgVehicles {
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
+					class CORE {name = "Core"; value = "CORE";};
 				};
 			};
 			class SB_hitpointHealth {
@@ -77,6 +79,7 @@ class CfgVehicles {
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
+					class CORE {name = "Core"; value = "CORE";};
 				};
 			};
 			class SB_hitpointHealth {
@@ -88,7 +91,6 @@ class CfgVehicles {
 				typeName = "NUMBER";
 				validate = "number";
 				defaultValue = "10000";
-				
 			};
 		};	
 	};
@@ -105,6 +107,7 @@ class CfgVehicles {
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
+					class CORE {name = "Core"; value = "CORE";};
 				};
 			};
 			class SB_hitpointHealth {
@@ -133,6 +136,8 @@ class CfgVehicles {
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
+					class CORE {name = "Core"; value = "CORE";};
+
 				};
 			};
 			class SB_hitpointHealth {
@@ -161,6 +166,7 @@ class CfgVehicles {
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
+					class CORE {name = "Core"; value = "CORE";};
 				};
 			};
 			class SB_hitpointHealth {
@@ -211,9 +217,9 @@ class CfgVehicles {
 		isGlobal = 0;
 		class Attributes : AttributesBase {
 			class SB_Module_shipName : Edit {
-				displayName = "Ship Variable Name";
-				tooltip = "This is the name of the Ship Variable. This must be unique if you plan to have multiple ships.";
 				property = "SB_Module_shipName";
+				displayName = "Ship name";
+				tooltip = "Name for the ship to be able to call it in scripts. MUST BE UNIQUE TO THE SHIP.";
 				defaultValue = """ship""";
 			};
 		};
@@ -336,6 +342,14 @@ class CfgVehicles {
 				defaultValue = 0;
 			};
 		};
+	};
+	class SB_module_escapePod : Module_F {
+		scope = 2;
+		displayName = "Escape Pod";
+		category = "SB_Modules";
+
+		isGlobal = 0;
+		isDisposable = 1;
 	};
 };
 #include "CfgFunctions.hpp"

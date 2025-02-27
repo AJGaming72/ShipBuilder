@@ -57,7 +57,8 @@ _ship setVariable ["SB_Fires", [], true];
 
 
 private _fires = _ship getVariable ["SB_Fires", []];
-waitUntil {(( getPosATL _ship) select 2) < 0};
+waitUntil {(( getPosATL _ship) select 2) < 20};
+_ship enableSimulationGlobal false;
 {
     if ((( getPosATL _x) select 2) < 0) then {
         deleteVehicle _x;

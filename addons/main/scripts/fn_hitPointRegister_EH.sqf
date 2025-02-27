@@ -30,6 +30,9 @@ if (_health <= 0) then {
 			_ship setVariable ["SB_engineModifier", (_engineModifier - (1 / _numEngines)), true]; 
 			diag_log (format["ShipBuilder: %1: Engine Destroyed", _ship]);
 		};
+		case "CORE": {
+			[_ship] spawn SB_fnc_destroyShip;
+		};
 		                // case "shield": {};
 		                // case "cockpit": {};
 	};
