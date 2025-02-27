@@ -22,8 +22,8 @@ if (_ship getVariable ["SB_isDying",false]) exitWith {systemChat "Ship cannot be
 // if we are going to thrust 
 if (_thrust isNotEqualTo 0) then {
 	private _currentStep = _ship getVariable ["SB_thrustStep", 2]; // 2 is the stop command
-	    private _stepNames = ["Full Reverse", "Reverse", "Halt", "Minimum Speed", "Cruise", "Combat", "Full Ahead"]; // Defining the names for each step
-	private _speedCoefficients = [-0.25, -0.1, 0, 0.1, 0.4, 0.8, 1];
+	private _stepNames = ["Full Reverse", "Reverse", "Halt", "Minimum Speed", "Cruise", "Combat", "Full Ahead"]; // Defining the names for each step
+	private _speedCoefficients = [-25, -10, 0, 10, 40, 80, 100]; // 
 	    _currentStep = _currentStep + _thrust; // Calculate our new step
 
 	if !((_currentStep < 0) || (_currentStep > ((count _speedCoefficients) - 1))) then {

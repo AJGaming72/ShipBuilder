@@ -15,10 +15,10 @@ class CfgFunctions {
         class mapDraw {};
         class markerSetup {};
         class shipCommandMovement {};
-        class shipRotationHandler {};
         class shipSetup {};
         class shipControllerSetup {};
-        class shipThrustHandlerPFH {};
+        class shipThrustHandler {};
+        class shipRotationHandler {};
 
         class turretGetIn {};
         class turretSetup {};

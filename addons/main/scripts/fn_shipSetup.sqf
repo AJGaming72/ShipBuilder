@@ -28,6 +28,7 @@ private _maps = []; // Defines the map objects
 private _cameras = [];
 private _escapePods = [];
 private _explosionPoints = [];
+private _chairs = [];
 private _actorClass = 0; // The ship's actor.
 
 {
@@ -41,6 +42,7 @@ private _actorClass = 0; // The ship's actor.
 		case "SB_module_map": {_maps pushBack _x;};
 		case "SB_module_camera": {_cameras pushBack _x;};
 		case "SB_module_escapePod": {_escapePods pushBack _x;};
+		case "SB_Module_shipChair": {_chairs pushBack _x;};
 		// Explosion Point
 		case "SB_explosionPoint": {_explosionPoints pushBack _x;};
 		// Hitpoints!
@@ -224,6 +226,17 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 		[_explosionPoint, _ship] call SB_fnc_explosionPointRegister;
 	};
 } forEach _explosionPoints;
+
+
+{
+	// Current result is saved in variable _x
+	private _syncObjects = synchronizedObjects _x;
+	_syncObjects deleteAt (_syncObjects find _logic); // This should mean we only have one item in our array, the ship controller.
+	if (count _syncObjects > 1) then {diag_log "[SB] Multiple Captain's Chair objects attached to one module. Defaulting to first item in array.";};
+	(_syncObjects select 0) setVariable ["SB_ship", _ship, true];
+	(_syncObjects select 0) setVariable ["SB_chair", true, true];
+} forEach _chairs;
+
 // At some point, adding multiple cameras will make sense. For now it doesn't.
 // {
 
@@ -250,5 +263,5 @@ sleep 1; // The camera needs time for other stuff to initialize first.
 
 // This way nothing gets thrown off in the loading process.
 _ship enableSimulationGlobal true;
-[_ship, 120] call SB_fnc_shipThrustHandlerPFH;
-[_ship, 3] spawn SB_fnc_shipRotationHandler; // Change to PFH
+[_ship, (_logic getVariable ["SB_Module_shipSpeed", 120])] call SB_fnc_shipThrustHandler;
+[_ship, (_logic getVariable ["SB_module_shipRotationSpeed", 3])] spawn SB_fnc_shipRotationHandler;

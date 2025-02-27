@@ -16,8 +16,7 @@
 */
 if (!isServer) exitWith {};
 params ["_ship", "_mps"];
-private _interval = 0.1; // This is how often the command should tick
-private _distPerTick = (_interval*_mps); // This calculates how far we would have to travel each tick to move the proper mps
+private _distPerTick = (SB_interval*_mps); // This calculates how far we would have to travel each tick to move the proper mps
 private _pos = getPosWorld _ship;
 
 _ship setVariable ["SB_mps", _mps, true];
@@ -35,11 +34,11 @@ _ship setVariable ["SB_engineModifier", 1, true]; // 2 is the stop command
 	private _engineModifier = _ship getVariable ["SB_engineModifier", 1];
 	// If our ship isn't going the commanded speed, move it slightly closer to the correct speed
 	if (_input isNotEqualTo _cmd) then {
-		private _accel = 0.01;
+		// Our acceleration change rate is 1.
 		if (_input > _cmd) then {
-			_input = parseNumber ((_input - _accel) toFixed 2); // Prevents floating point errors from occuring
+			_input = (_input - 1); // Prevents floating point errors from occuring
 		} else {
-			_input = parseNumber ((_input + _accel) toFixed 2); // Prevents floating point errors from occuring
+			_input = (_input + 1); // Prevents floating point errors from occuring
 		};
 		_ship setVariable ["SB_thrustInput", _input, true]; // Make sure we update our variable
 	};
@@ -53,8 +52,9 @@ _ship setVariable ["SB_engineModifier", 1, true]; // 2 is the stop command
 	private _up = vectorNormalized (_dir vectorCrossProduct _right); // Ensure orthogonality
 
 	// Local-space offset (e.g., 1m to the right, 0m up, 2m forward)
-	private _offset = [0, 0, (_input*_distPerTick * _engineModifier)];
-
+	private _offset = [0, 0, (_input/100*_distPerTick * _engineModifier)]; 
+	// In order to prevent floating point errors, we work with the input at a factor of 10x what is is. We *could* fix this with a toFixed
+	// However, toFixed outputs a string, which we then need to parse. A simple math equation should be faster.
 
 	// Convert to world-space
 	private _worldOffset = 
@@ -71,5 +71,5 @@ _ship setVariable ["SB_engineModifier", 1, true]; // 2 is the stop command
 	if !(_alive) then {
 		[_handle] call CBA_fnc_removePerFrameHandler;
 	};
-},_interval,[_ship, _distPerTick, _pos]] call CBA_fnc_addPerFrameHandler;
+},SB_interval,[_ship, _distPerTick, _pos]] call CBA_fnc_addPerFrameHandler;
 

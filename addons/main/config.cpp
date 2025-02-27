@@ -14,6 +14,13 @@ class CfgPatches {
 		requiredAddons[] = { "CBA_main" };
 	};
 };
+class Extended_PreInit_EventHandlers {
+    class SB_main_preInit {
+        init = "call compile preprocessFileLineNumbers 'main\XEH_preInit.sqf'";
+		clientInit = "call compile preprocessFileLineNumbers 'main\XEH_clientPreInit.sqf'";
+	};
+};
+
 class CfgFactionClasses
 {
 	class NO_CATEGORY;
@@ -222,7 +229,31 @@ class CfgVehicles {
 				tooltip = "Name for the ship to be able to call it in scripts. MUST BE UNIQUE TO THE SHIP.";
 				defaultValue = """ship""";
 			};
+			class SB_Module_shipSpeed : Edit {
+				property = "SB_Module_shipSpeed";
+				displayName = "Ship's Speed (m/s)";
+				tooltip = "What should the ship's speed be in Meters per Second?";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = 120;
+			};
+			class SB_module_shipRotationSpeed : Edit {
+				property = "SB_module_shipRotationSpeed";
+				displayName = "Ship Rotation Speed (d/s)";
+				tooltip = "How fast should the ship rotate in Degrees per Second?";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = 3;
+			};
 		};
+	};
+	class SB_Module_shipChair : Module_F {
+		scope = 2;
+		displayName = "Ship Captain's Chair";
+		category = "SB_Modules";
+
+		isGlobal = 0;
+		isDisposable = 1;
 	};
 	class SB_Module_trigger : Module_F {
 		scope = 2;
