@@ -18,10 +18,9 @@
 	
 */
 if (!isServer) exitWith {};
-params ["_self", "_ship", "_type", "_health"];
+params ["_self", "_ship", "_health"];
 _self setVariable ["SB_ship", _ship, true];
 _self setVariable ["SB_partHealth", _health, true];
-_self setVariable ["SB_partType", _type, true];
 [_self, _ship] call BIS_fnc_attachToRelative;
 _self setObjectTextureGlobal [0,""];
 _self setObjectTextureGlobal [1,""];

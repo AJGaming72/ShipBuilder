@@ -58,6 +58,7 @@ _shipActor attachTo [_ship, [0,0,0]];
 _ship enableSimulationGlobal false;
 _ship setVariable ["SB_shipActor", _shipActor, false]; // We create the vehicle locally because really there's no reason to have it not be local, should be slightly better performance wise. Might be unnecessary.
 _ship setVariable ["SB_alive", true, true];
+_ship setVariable ["SB_fires", [], true];
 _ship allowDamage false;
 
 private _shipName = _logic getVariable "SB_Module_shipName";
@@ -154,13 +155,13 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	This only accounts for the Engine hitpoint type right now.
 	*/
 	private _engines = _ship getVariable ["SB_numEngines", 0];
-	private _type = _x getVariable ["SB_hitpointType", ""];
-	private _health = _x getVariable ["SB_hitpointHealth", 10000];
-	if (_type == "engine") then {
+	private _health = _x getVariable ["SB_Module_hitpointHealth", 10000];
+	private _type = _x getVariable ["SB_module_hitpointType", 'ENGINE'];
+	if (_type == "ENGINE") then {
 		_ship setVariable ["SB_numEngines", (_engines + 1), true];
 
 	};
-	[_x, _ship, _type, _health] call SB_fnc_hitPointRegister;
+	[_x, _ship, _health] call SB_fnc_hitPointRegister;
 } forEach (_hitpoints);
 
 // Marker setup
@@ -218,11 +219,10 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	// We seperate these so we don't get the case that it is not in one array, but in the other, and gets misrepresented as exterior.
 
 	if (_explosionPoint getVariable "SB_interior") then {
-		[_explosionPoint, _ship] call SB_fnc_intExplosionPointRegister; systemChat str _x;
+		[_explosionPoint, _ship] call SB_fnc_intExplosionPointRegister;
 	} else {
-		[_explosionPoint, _ship] call SB_fnc_explosionPointRegister; systemChat str _x;
+		[_explosionPoint, _ship] call SB_fnc_explosionPointRegister;
 	};
-	systemChat str _x;
 } forEach _explosionPoints;
 // At some point, adding multiple cameras will make sense. For now it doesn't.
 // {

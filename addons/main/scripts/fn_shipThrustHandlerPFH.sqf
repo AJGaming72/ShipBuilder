@@ -55,6 +55,7 @@ _ship setVariable ["SB_engineModifier", 1, true]; // 2 is the stop command
 	// Local-space offset (e.g., 1m to the right, 0m up, 2m forward)
 	private _offset = [0, 0, (_input*_distPerTick * _engineModifier)];
 
+
 	// Convert to world-space
 	private _worldOffset = 
 	[

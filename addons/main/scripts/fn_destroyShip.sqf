@@ -22,7 +22,6 @@ private _intExplosionPoints = _ship getVariable ["SB_intExplosionPoints", []];
 
 [_ship] remoteExec ["SB_fnc_intShipDestructionEffects", 0, true]; // Should be called on all clients in a scheduled environment
 
-_ship setVariable ["SB_Fires", [], true];
 
 {
     private _delay = floor random 30;
@@ -31,7 +30,7 @@ _ship setVariable ["SB_Fires", [], true];
     private _bomb = createVehicle ["Bo_GBU12_LGB_MI10", _pos, [], 0, "CAN_COLLIDE"];
     triggerAmmo _bomb;
     private _fire = createVehicle ["test_EmptyObjectForFireBig", _pos, [], 0, "CAN_COLLIDE"];
-    private _fires = (_this select 1) getVariable ["SB_Fires", []];
+    private _fires = (_this select 1) getVariable ["SB_fires", []];
     _fires pushBack _fire;
     (_this select 1) setVariable ["SB_fires", _fires, true];
     [_fire, (_this select 1)] call BIS_fnc_attachToRelative;

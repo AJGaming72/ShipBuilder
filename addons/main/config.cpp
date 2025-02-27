@@ -40,10 +40,10 @@ class CfgVehicles {
 	class SB_hitPoint_01 : Land_VR_Block_01_F {
 		displayName = "ShipBuilder Hitpoint 1";
 		class Attributes {
-			class SB_hitpointType {
+			class SB_Module_hitpointType {
 				displayName = "Hitpoint Type";
 				tooltip = "Placeholder for future plans!";
-				property = "SB_hitpointType";
+				property = "SB_Module_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
 				defaultValue = """ENGINE""";
@@ -53,10 +53,10 @@ class CfgVehicles {
 					class CORE {name = "Core"; value = "CORE";};
 				};
 			};
-			class SB_hitpointHealth {
+			class SB_Module_hitpointHealth {
 				displayName = "Hitpoint Health";
 				tooltip = "The health of the hitpoint";
-				property = "SB_hitpointHealth";
+				property = "SB_Module_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
 				typeName = "NUMBER";
@@ -69,10 +69,10 @@ class CfgVehicles {
 	class SB_hitPoint_02 : Land_VR_Block_02_F {
 		displayName = "ShipBuilder Hitpoint 2";
 		class Attributes {
-			class SB_hitpointType {
+			class SB_Module_hitpointType {
 				displayName = "Hitpoint Type";
 				tooltip = "Placeholder for future plans!";
-				property = "SB_hitpointType";
+				property = "SB_Module_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
 				defaultValue = """ENGINE""";
@@ -82,10 +82,10 @@ class CfgVehicles {
 					class CORE {name = "Core"; value = "CORE";};
 				};
 			};
-			class SB_hitpointHealth {
+			class SB_Module_hitpointHealth {
 				displayName = "Hitpoint Health";
 				tooltip = "The health of the hitpoint";
-				property = "SB_hitpointHealth";
+				property = "SB_Module_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
 				typeName = "NUMBER";
@@ -97,10 +97,10 @@ class CfgVehicles {
 	class SB_hitPoint_03 : Land_VR_Block_03_F {
 		displayName = "ShipBuilder Hitpoint 3";
 		class Attributes {
-			class SB_hitpointType {
+			class SB_Module_hitpointType {
 				displayName = "Hitpoint Type";
 				tooltip = "Placeholder for future plans!";
-				property = "SB_hitpointType";
+				property = "SB_Module_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
 				defaultValue = """ENGINE""";
@@ -110,10 +110,10 @@ class CfgVehicles {
 					class CORE {name = "Core"; value = "CORE";};
 				};
 			};
-			class SB_hitpointHealth {
+			class SB_Module_hitpointHealth {
 				displayName = "Hitpoint Health";
 				tooltip = "The health of the hitpoint";
-				property = "SB_hitpointHealth";
+				property = "SB_Module_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
 				typeName = "NUMBER";
@@ -126,10 +126,10 @@ class CfgVehicles {
 	class SB_hitPoint_04 : Land_VR_Block_04_F {
 		displayName = "ShipBuilder Hitpoint 4";
 		class Attributes {
-			class SB_hitpointType {
+			class SB_Module_hitpointType {
 				displayName = "Hitpoint Type";
 				tooltip = "Placeholder for future plans!";
-				property = "SB_hitpointType";
+				property = "SB_Module_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
 				defaultValue = """ENGINE""";
@@ -140,10 +140,10 @@ class CfgVehicles {
 
 				};
 			};
-			class SB_hitpointHealth {
+			class SB_Module_hitpointHealth {
 				displayName = "Hitpoint Health";
 				tooltip = "The health of the hitpoint";
-				property = "SB_hitpointHealth";
+				property = "SB_Module_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
 				typeName = "NUMBER";
@@ -156,23 +156,23 @@ class CfgVehicles {
 	class SB_hitPoint_05 : Land_VR_Block_05_F {
 		displayName = "ShipBuilder Hitpoint 5";
 		class Attributes {
-			class SB_hitpointType {
+			class SB_Module_hitpointType {
 				displayName = "Hitpoint Type";
 				tooltip = "Placeholder for future plans!";
-				property = "SB_hitpointType";
+				property = "SB_Module_hitpointType";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Combo";
-				defaultValue = """ENGINE""";
+				defaultValue = """ENGINE"""; // Default Value doesn't seem to take, this is remedied in SQF. Should investigate why this is.
 				typeName = "STRING";
 				class Values {
 					class ENGINE {name = "Engine"; value = "ENGINE";};
 					class CORE {name = "Core"; value = "CORE";};
 				};
 			};
-			class SB_hitpointHealth {
+			class SB_Module_hitpointHealth {
 				displayName = "Hitpoint Health";
 				tooltip = "The health of the hitpoint";
-				property = "SB_hitpointHealth";
+				property = "SB_Module_hitpointHealth";
 				expression = "_this setVariable ['%s',_value];";
 				control = "Edit";
 				typeName = "NUMBER";
