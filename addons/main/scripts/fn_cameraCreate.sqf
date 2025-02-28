@@ -36,16 +36,15 @@ _screen setObjectTexture [_selectionID, "#(argb,512,512,1)r2t(sbrtactivecam,1)"]
 // Create our camera
 private _cam = "camera" camCreate [0, 0, 0];
 _cam setPosASL (getPosASL _camera);
-_cam setVectorDirAndUp [(vectorDir _actor), (vectorUp _actor)];
-
+_cam setVectorDirAndUp [vectorDir _camera, vectorUp _camera];
 
 _cam cameraEffect ["Terminate", "Back", "sbrtactivecam"];
 _cam cameraEffect ["Internal", "Back", "sbrtactivecam"];
 
-SB_activeCam = _cam;
-private _camOffset = _actor worldToModel ASLToAGL getPosASL _camera;
-_cam setVariable ["SB_camOffset", _camOffset];
-_cam setVariable ["SB_ship", _ship];
+
+private _camOffset = [_actor worldToModel ASLToAGL getPosASL _camera, [_cam, _ship, true] call BIS_fnc_vectorDirAndUpRelative];
+_cam setVariable ["SB_camOffset", _camOffset,true];
+_cam setVariable ["SB_ship", _ship,true];
 
 deleteVehicle _camera; // No longer need the placeholder object
 
@@ -58,16 +57,5 @@ _trg setTriggerArea [5, 5, 0, false];
 _trg setTriggerInterval 1;
 _trg setVariable ["SB_camera", _cam];
 _trg setTriggerActivation ["ANYPLAYER", "PRESENT", true];
-_trg setTriggerStatements ["this", "thisTrigger getVariable ""SB_camera"" cameraEffect ['Internal', 'Back', 'sbrtactivecam'];", ""];
+_trg setTriggerStatements ["this", "[thisTrigger] call SB_fnc_activeCam;", ""];
 
-
-// While memory intensive, this method allows for a smoother camera connection to the ship. For this reason, I intend to add an active camera function.
-[{
-	params ["_args", "_handle"];
-	_args params ["_cam", "_actor", "_camOffset"];
-	_cam setPosASL (AGLToASL (_actor modelToWorld _camOffset));
-	_cam setVectorDirAndUp [(vectorDir _actor), (vectorUp _actor)];
-	if (_cam isNotEqualTo SB_activeCam) then {
-		[_handle] call CBA_fnc_removePerFrameHandler;
-	};
-},0,[_cam, _actor, _camOffset]] call CBA_fnc_addPerFrameHandler;

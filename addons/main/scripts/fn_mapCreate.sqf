@@ -52,7 +52,7 @@ _screen addAction ["Zoom out",{
 private _alive = _ship getVariable ["SB_alive", false];
 
 _map ctrlAddEventHandler ["Draw", {
-    _this call SB_fnc_mapDraw;
+    call SB_fnc_mapDraw; // _this is inherited from the calling scope. Thanks hemtt!
 }];
 
 while {_alive} do {

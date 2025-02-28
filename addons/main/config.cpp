@@ -14,6 +14,16 @@ class CfgPatches {
 		requiredAddons[] = { "CBA_main" };
 	};
 };
+
+class CfgVehicleIcons
+{
+	SB_icon_ship = "main\data\iconShip.paa";
+	SB_icon_camera = "main\data\iconCamera.paa";
+	SB_icon_chair = "main\data\iconChair.paa";
+	SB_icon_controller = "main\data\iconController.paa";
+	SB_icon_escapePod = "main\data\iconEscapePod.paa";
+	SB_icon_turret = "main\data\iconTurret.paa";
+};
 class Extended_PreInit_EventHandlers {
     class SB_main_preInit {
         init = "call compile preprocessFileLineNumbers 'main\XEH_preInit.sqf'";
@@ -220,6 +230,7 @@ class CfgVehicles {
 		displayName = "Ship";
 		category = "SB_Modules";
 		function = "SB_fnc_shipSetup";
+		icon="SB_icon_ship";
 
 		isGlobal = 0;
 		class Attributes : AttributesBase {
@@ -251,6 +262,7 @@ class CfgVehicles {
 		scope = 2;
 		displayName = "Ship Captain's Chair";
 		category = "SB_Modules";
+		icon = "SB_icon_chair";
 
 		isGlobal = 0;
 		isDisposable = 1;
@@ -259,6 +271,7 @@ class CfgVehicles {
 		scope = 2;
 		displayName ="Ship Builder Trigger";
 		category = "SB_modules"; 
+		icon = "\A3\ui_f\data\map\markers\military\circle_CA.paa";
 		canSetArea = 1;
 		canSetAreaShape = 0;
 		canSetAreaHeight = 1;
@@ -274,6 +287,7 @@ class CfgVehicles {
 	};
 	class SB_Module_hangarTrigger : SB_Module_trigger{
 		displayName = "Ship Builder Hangar Trigger";
+		icon = "\A3\ui_f\data\map\mapcontrol\Tourism_CA.paa";
 		class Attributes : AttributesBase {
 			class SB_Module_hangarTriggerID : Edit {
 				property = "SB_Module_hangarTriggerID";
@@ -300,6 +314,7 @@ class CfgVehicles {
 		scope = 2;
 		displayName = "Turret Module";
 		category = "SB_Modules";
+		icon = "SB_icon_turret";
 
 		isGlobal = 0;
 		isDisposable = 1;
@@ -318,6 +333,7 @@ class CfgVehicles {
 		scope = 2;
 		displayName = "Ship Controller";
 		category = "SB_Modules";
+		icon = "SB_icon_controller";
 
 		isGlobal = 0;
 		isDisposable = 1;
@@ -326,6 +342,7 @@ class CfgVehicles {
 		scope = 2;
 		displayName = "Ship Map";
 		category = "SB_Modules";
+		icon = "\A3\modules_f\data\iconStrategicMapInit_ca.paa";
 
 		isGlobal = 0;
 		isDisposable = 1;
@@ -360,6 +377,7 @@ class CfgVehicles {
 		scope = 2;
 		displayName = "Ship Camera";
 		category = "SB_Modules";
+		icon = "SB_icon_camera";
 
 		isGlobal = 0;
 		isDisposable = 1;
@@ -378,6 +396,7 @@ class CfgVehicles {
 		scope = 2;
 		displayName = "Escape Pod";
 		category = "SB_Modules";
+		icon = "SB_icon_escapePod";
 
 		isGlobal = 0;
 		isDisposable = 1;

@@ -3,6 +3,7 @@ class CfgFunctions {
         class Main {
         file = "main\scripts";
         class cameraCreate {};
+        class activeCam {};
         class destroyShip {};
         class escapePodLaunch {};
         class escapePodRegister {};
