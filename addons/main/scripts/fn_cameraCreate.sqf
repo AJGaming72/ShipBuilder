@@ -31,31 +31,34 @@ while {_actor == _ship} do {
 // Good: "#(argb,512,512,1)r2t(sbrtactivecam,1)"
 // Bad: "#(argb, 512, 512, 1)r2t(sbrtactivecam, 1)"
 // This took so much longer than I want to admit to figure out.
-_screen setObjectTexture [_selectionID, "#(argb,512,512,1)r2t(sbrtactivecam,1)"]; 
+private _screenID = ((_screen call BIS_fnc_netId) regexReplace ["[:]","_"]) + "sbactivecam";
+_screen setObjectTexture [_selectionID, "#(argb,512,512,1)r2t("+_screenID+",1)"]; 
 
 // Create our camera
 private _cam = "camera" camCreate [0, 0, 0];
 _cam setPosASL (getPosASL _camera);
 _cam setVectorDirAndUp [vectorDir _camera, vectorUp _camera];
 
+deleteVehicle _camera; // No longer need the placeholder object
+
+
 _cam cameraEffect ["Terminate", "Back", "sbrtactivecam"];
 _cam cameraEffect ["Internal", "Back", "sbrtactivecam"];
 
 
-private _camOffset = [_actor worldToModel ASLToAGL getPosASL _camera, [_cam, _ship, true] call BIS_fnc_vectorDirAndUpRelative];
-_cam setVariable ["SB_camOffset", _camOffset,true];
-_cam setVariable ["SB_ship", _ship,true];
+private _camOffset = [_actor worldToModel ASLToAGL getPosASL _cam, [_cam, _ship, true] call BIS_fnc_vectorDirAndUpRelative];
 
-deleteVehicle _camera; // No longer need the placeholder object
 
-// INTERVAL NEEDS TO BE CHANGED
-private _interval = 0.04;
 
 // I plan for this to be a bit better in the future, this is a shoddy implementation of active camera
 private _trg = createTrigger ["EmptyDetector", getPos _screen];
 _trg setTriggerArea [5, 5, 0, false];
 _trg setTriggerInterval 1;
 _trg setVariable ["SB_camera", _cam];
+_trg setVariable ["SB_ship", _ship];
+_trg setVariable ["SB_camOffset", _camOffset];
+_trg setVariable ["SB_screenID",_screenID];
 _trg setTriggerActivation ["ANYPLAYER", "PRESENT", true];
+_trg setTriggerArea [5,5,0,false,5];
 _trg setTriggerStatements ["this", "[thisTrigger] call SB_fnc_activeCam;", ""];
 

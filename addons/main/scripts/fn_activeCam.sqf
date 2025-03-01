@@ -14,16 +14,13 @@
 */
 params ["_trigger"];
 private _cam = _trigger getVariable "SB_camera";
-systemChat format["_cam: %1",_cam];
-if (SB_activeCam isNotEqualTo _cam) exitWith {}; // This stops us from creating multiple of the same PFH forever and ever.
+if (SB_activeCam isEqualTo _cam) exitWith {}; // This stops us from creating multiple of the same PFH forever and ever.
 SB_activeCam = _cam;
-_cam cameraEffect ['Internal', 'Back', 'sbrtactivecam'];
-private _offset = _cam getVariable ["SB_camOffset", [[0,0,0],[0,0]]];
-private _ship = _cam getVariable "SB_ship";
+private _screenID = _trigger getVariable "SB_screenID";
+_cam cameraEffect ['Internal', 'Back', _screenID];
+private _offset = _trigger getVariable ["SB_camOffset",[[0,0,0],[0,0]]];
+private _ship = _trigger getVariable "SB_ship";
 private _actor = _ship getVariable "SB_shipActor";
-systemChat format["_offset: %1",_offset];
-systemChat format["_ship: %1",_ship];
-systemChat format["_actor: %1",_actor];
 
 [{
 	params ["_args", "_handle"];
