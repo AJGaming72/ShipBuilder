@@ -80,7 +80,7 @@ private _shipTriggers = [];
 	_interiorTrigger setPosASL (getPosASL _x); // We setPosASL after instead of setting pos here to avoid an unusual issue with height not being set properly.
 	private _area = _x getVariable "objectArea";
 	_interiorTrigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
-	_interiorTrigger setTriggerStatements ["vehicle player in thisList;","player setVariable ['SB_ship', " + _shipName + ", true];", "player setVariable ['SB_ship', -1, true];"];
+	_interiorTrigger setTriggerStatements ["vehicle player in thisList;","player setVariable ['SB_ship', " + _shipName + ", true];", "player setVariable ['SB_ship', -1, true];SB_activeCam = -1;"];
 	_interiorTrigger setTriggerArea _area;
 	_shipTriggers pushBack _interiorTrigger;
 } forEach _shipTriggersLogic;
@@ -263,5 +263,10 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 
 // This way nothing gets thrown off in the loading process.
 _ship enableSimulationGlobal true;
-[_ship, (_logic getVariable ["SB_Module_shipSpeed", 120])] call SB_fnc_shipThrustHandler;
-[_ship, (_logic getVariable ["SB_module_shipRotationSpeed", 3])] spawn SB_fnc_shipRotationHandler;
+private _shipSpeed = _logic getVariable ["SB_Module_shipSpeed", 120];
+private _shipRotationSpeed = _logic getVariable ["SB_module_shipRotationSpeed", 3];
+_ship setVariable ["SB_shipSpeed", _shipSpeed, true];
+_ship setVariable ["SB_shipRotationSpeed", _shipRotationSpeed, true];
+_ship setVariable ["SB_active", true, true];
+[_ship, _shipSpeed] call SB_fnc_shipThrustHandler;
+[_ship, _shipRotationSpeed] call SB_fnc_shipRotationHandler;

@@ -25,10 +25,9 @@ _ship setVariable ["SB_thrustInput", 0, true]; // Actual speed of ship
 _ship setVariable ["SB_thrustCommand", 0, true]; // Commanded speed of ship
 _ship setVariable ["SB_thrustStep", 2, true]; // 2 is the stop command
 _ship setVariable ["SB_engineModifier", 1, true]; // 2 is the stop command
-[{
+private _handle = [{
 	params ["_args", "_handle"];
 	_args params ["_ship", "_distPerTick", "_pos"];
-	private _alive = _ship getVariable ["SB_alive", true];
 	private _input = _ship getVariable ["SB_thrustInput", 0];
 	private _cmd = _ship getVariable ["SB_thrustCommand", 0];
 	private _engineModifier = _ship getVariable ["SB_engineModifier", 1];
@@ -68,8 +67,5 @@ _ship setVariable ["SB_engineModifier", 1, true]; // 2 is the stop command
 	_pos = _pos vectorAdd _worldOffset;
 	_ship setPosWorld _pos;
 	_args set [2, _pos]; // Update our position
-	if !(_alive) then {
-		[_handle] call CBA_fnc_removePerFrameHandler;
-	};
 },SB_interval,[_ship, _distPerTick, _pos]] call CBA_fnc_addPerFrameHandler;
-
+_ship setVariable ["SB_thrustHandler",_handle,true];

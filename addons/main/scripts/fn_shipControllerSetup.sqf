@@ -39,3 +39,7 @@ _controller addAction ["YawLeft", {
 	params ["_target", "_caller", "_actionId", "_arguments"];
 	[(_target getVariable "SB_ship"), 0, [-1, 0, 0]] call SB_fnc_shipCommandMovement;
 }];
+_controller addAction ["Toggle Anchor", {
+	params ["_target", "_caller", "_actionId", "_arguments"];
+	[(_target getVariable "SB_ship")] call SB_fnc_toggleAnchor;
+}];

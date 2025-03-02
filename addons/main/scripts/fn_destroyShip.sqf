@@ -58,6 +58,8 @@ private _intExplosionPoints = _ship getVariable ["SB_intExplosionPoints", []];
 private _fires = _ship getVariable ["SB_Fires", []];
 waitUntil {(( getPosATL _ship) select 2) < 20};
 _ship enableSimulationGlobal false;
+[_ship getVariable "SB_thrustHandler"] call CBA_fnc_removePerFrameHandler;
+[_ship getVariable "SB_rotationHandler"] call CBA_fnc_removePerFrameHandler;
 {
     if ((( getPosATL _x) select 2) < 0) then {
         deleteVehicle _x;
@@ -66,5 +68,7 @@ _ship enableSimulationGlobal false;
     
 } forEach _fires;
 [4] spawn BIS_fnc_earthquake;
-_ship setVariable ["SB_alive", false];
+
+_ship setVariable ["SB_alive", false,true];
+_ship setVariable ["SB_active", false,true];
 

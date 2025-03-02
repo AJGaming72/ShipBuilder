@@ -20,6 +20,7 @@ class CfgFunctions {
         class shipControllerSetup {};
         class shipThrustHandler {};
         class shipRotationHandler {};
+        class toggleAnchor {};
 
         class turretGetIn {};
         class turretSetup {};

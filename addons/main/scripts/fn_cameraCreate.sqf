@@ -50,7 +50,6 @@ private _camOffset = [_actor worldToModel ASLToAGL getPosASL _cam, [_cam, _ship,
 
 
 
-// I plan for this to be a bit better in the future, this is a shoddy implementation of active camera
 private _trg = createTrigger ["EmptyDetector", getPos _screen];
 _trg setTriggerArea [5, 5, 0, false];
 _trg setTriggerInterval 1;

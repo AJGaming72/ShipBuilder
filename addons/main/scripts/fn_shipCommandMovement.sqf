@@ -17,6 +17,7 @@
 if !(hasInterface) exitWith {};
 params ["_ship", "_thrust", "_rotation"];
 
+if !(_ship getVariable ["SB_active",false]) exitWith {systemChat "Ship cannot be controlled: Anchored";};// If we are dying, remove ability to control
 if (_ship getVariable ["SB_isDying",false]) exitWith {systemChat "Ship cannot be controlled: Dying";};// If we are dying, remove ability to control
 
 // if we are going to thrust 

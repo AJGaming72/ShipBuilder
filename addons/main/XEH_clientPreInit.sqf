@@ -6,6 +6,7 @@
 #define DIK_D 32
 #define DIK_E 18
 #define DIK_Q 16
+#define DIK_F 33
 
 
 
@@ -60,3 +61,10 @@
         [((vehicle player) getVariable "SB_ship"), 0, [-1, 0, 0]] call SB_fnc_shipCommandMovement;
     };     
 },[DIK_D,[false,false,false]],false] call CBA_fnc_addKeybind;
+
+["Shipbuilder","SB_toggleAnchor", "Toggle Anchor", {
+    if ((vehicle player) getVariable ["SB_chair",false]) then {
+        [((vehicle player) getVariable "SB_ship")] call SB_fnc_toggleAnchor;
+    };        
+},"",[DIK_F,[false,false,false]],false] call CBA_fnc_addKeybind;
+
