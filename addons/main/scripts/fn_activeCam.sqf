@@ -8,7 +8,6 @@
 	_trigger: The trigger object
 	
 	TODO: 
-    CBA interval
 
 	Run on player
 */

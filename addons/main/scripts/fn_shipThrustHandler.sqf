@@ -8,11 +8,8 @@
 	_mps: Meters per second the ship should travel at
 	
 	TODO: 
-	Interval should be a CBA setting
-	Add "ANCHOR" mode so ship's script isn't constantly running.
 
 	Run on server
-	
 */
 if (!isServer) exitWith {};
 params ["_ship", "_mps"];

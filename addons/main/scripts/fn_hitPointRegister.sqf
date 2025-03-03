@@ -12,10 +12,6 @@
 	TODO: 
 
 	Run on server
-
-	Add Event Handler to all players + JIP
-	EH Needs to remoteExec inside so it only runs on the server
-	
 */
 if (!isServer) exitWith {};
 params ["_self", "_ship", "_health"];
@@ -26,6 +22,6 @@ _self setObjectTextureGlobal [0,""];
 _self setObjectTextureGlobal [1,""];
 _self setObjectMaterialGlobal [0,""];
 _self setObjectMaterialGlobal [1,""];
-[{_self addEventHandler ["HitPart", {[(_this select 0)] call SB_fnc_hitPointRegister_EH;}]}] remoteExecCall ["call", 0, true];
+[_self] remoteExecCall ["SB_fnc_hitPointEHSetter", 0, true];
 // Here, we are making sure that all players have the event handler.
 // "HitPart" EH runs only on the shooters computer. It also works on most static objects. Yay!

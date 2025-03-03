@@ -9,8 +9,6 @@
 	_rotation: Command input (Array format: [0, 0, 0])
 	
 	TODO: 
-	Add speeds as setting 
-	Add speed coefficients as setting on ship
 
 	Run on Player
 */

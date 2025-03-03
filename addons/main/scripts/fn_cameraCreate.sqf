@@ -9,10 +9,6 @@
 	_camera: The object used to show the place and direction of a camera
 	
 	TODO: 
-	Add garbage cleanup
-	Add an "Active Camera"
-	Move the camera in a more clean way with the ship
-	Interval from a CBA setting
 
 	Run on player
 */
@@ -44,10 +40,10 @@ deleteVehicle _camera; // No longer need the placeholder object
 
 _cam cameraEffect ["Terminate", "Back", "sbrtactivecam"];
 _cam cameraEffect ["Internal", "Back", "sbrtactivecam"];
-
-
-private _camOffset = [_actor worldToModel ASLToAGL getPosASL _cam, [_cam, _ship, true] call BIS_fnc_vectorDirAndUpRelative];
-
+private _camOffset = _ship getVariable ["SB_camOffset",0];
+if (_camOffset isEqualTo 0) then {
+	_camOffset = [_actor worldToModel ASLToAGL getPosASL _cam, [_cam, _ship, true] call BIS_fnc_vectorDirAndUpRelative];
+};
 
 
 private _trg = createTrigger ["EmptyDetector", getPos _screen];
@@ -55,7 +51,7 @@ _trg setTriggerArea [5, 5, 0, false];
 _trg setTriggerInterval 1;
 _trg setVariable ["SB_camera", _cam];
 _trg setVariable ["SB_ship", _ship];
-_trg setVariable ["SB_camOffset", _camOffset];
+_trg setVariable ["SB_camOffset", _camOffset, true];
 _trg setVariable ["SB_screenID",_screenID];
 _trg setTriggerActivation ["ANYPLAYER", "PRESENT", true];
 _trg setTriggerArea [5,5,0,false,5];

@@ -19,4 +19,4 @@ _controller addAction ["Get in turret",
 	params ["_target", "_caller", "_actionId", "_arguments"];
 	[_caller, (_arguments select 0)] call SB_fnc_turretGetIn;
 	_caller switchMove "AmovPsitMstpSnonWnonDnon_ground";
-}, [_turret]];
+}, [_turret],1.5,true,true,"","((_target getVariable 'SB_turret') getVariable 'SB_turretAvailable')"];

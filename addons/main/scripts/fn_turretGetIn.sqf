@@ -16,16 +16,8 @@
 */
 if !(hasInterface) exitWith {};
 params ["_user", "_turret"];
-// Make certain the turret is not currently controlled by a player
-private _playerControlled = false;
-{
-	if (isPlayer (_x select 0)) then {
-		_playerControlled = true;
-	};
-} forEach (fullCrew _turret);
-if (_playerControlled) exitWith {
-	systemChat "Player controlling turret already!"
-};
+if !(_turret getVariable ["SB_turretAvailable",false]) exitWith {systemChat "Turret is not available"};
+
 // Make the turret be on the correct team
 private _grp = createGroup (side _user);
 _grp deleteGroupWhenEmpty true;
@@ -36,23 +28,19 @@ if (count (crew _turret) == 0) then {
 	private _unit = _grp createUnit ["C_man_1", [0, 0, 0], [], 0, "NONE"];
 	[_unit] joinSilent _grp;
 	_unit moveInAny _turret;
-	// Remove the AI controlling the turret when the user exits it
-	private _handle = [_unit, _user] spawn {
-		private _unit = _this select 0;
-		private _user = _this select 1;
-		waitUntil { sleep 1; (focusOn isNotEqualTo _user); };
-		_unit setDamage 1;
-		deleteVehicle _unit;
-	};
-	_turret addEventHandler ["GetOut", {
+	// if the user exits the turret, we can just kill their unit.
+	private _handle = _turret addEventHandler ["GetOut", {
 		params ["_vehicle", "_role", "_unit", "_turret", "_isEject"];
 		_unit setDamage 1;
 		deleteVehicle _unit;
-		_vehicle removeEventHandler [_thisEvent, _thisEventHandler]; // Remove the event handler so a non-remote user doesn't delete a player. I don't even think I can do that?
 	}];
+	_turret setVariable ["SB_turretRCHandler", _handle];
 	_unit setUnitLoadout getUnitLoadout _user; // Make the unit look like our user
 };
 
 // Actually remoteControl the turret
+_turret setVariable ["SB_turretAvailable", false, true];
 _turret switchCamera "INTERNAL";
-_user remoteControl _turret;
+_user remoteControl ((crew _turret) select 0);
+// We add a function to check if the user stops remote controlling. unfortunately, there is NOT an event handler for this. :(
+[_turret] spawn SB_fnc_turretRC_EH;

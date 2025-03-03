@@ -7,6 +7,7 @@ class CfgFunctions {
         class destroyShip {};
         class escapePodLaunch {};
         class escapePodRegister {};
+        class escapePodAction {};
         class explosionPointRegister {};
         class hitPointRegister {};
         class hitPointRegister_EH {};
@@ -25,6 +26,7 @@ class CfgFunctions {
         class turretGetIn {};
         class turretSetup {};
         class turretSetupLocal {};
+        class turretRC_EH {};
 
         /*
         Functions that didn't make it in

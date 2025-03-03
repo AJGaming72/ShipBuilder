@@ -7,7 +7,6 @@
 	_self: The explosion point
 	_ship: The ship object
 	
-	[_self, _ship] call compile preprocessFileLineNumbers 'Scripts\intExplosionPointRegister.sqf';
 
 	TODO: 
 	
