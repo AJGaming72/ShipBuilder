@@ -6,10 +6,8 @@
 	Arguments:
 
 	TODO: 
-	Ship speed and turn rate as attributes on ship module
 
 	Run on server
-	
 */
 params [
 	["_logic", objNull, [objNull]],		// Argument 0 is module logic
@@ -238,7 +236,6 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	(_syncObjects select 0) setVariable ["SB_chair", true, true];
 } forEach _chairs;
 
-// At some point, adding multiple cameras will make sense. For now it doesn't.
 {
 
 	private _selectionID = _x getVariable "SB_module_selectionID";
@@ -255,7 +252,9 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	} forEach _shipTriggers;
 	// screen, _selectionID, camera, ship;
 	sleep 1; // The camera needs time for other stuff to initialize first.
-	[(_syncObjects select _screen),_selectionID, (_syncObjects select _cam),_ship] remoteExec ["SB_fnc_cameraCreate", 0, true];
+	private _camOffset = [_ship worldToModel ASLToAGL getPosASL (_syncObjects select _cam), [(_syncObjects select _cam), _ship, true] call BIS_fnc_vectorDirAndUpRelative];
+	(_syncObjects select _screen) setVariable ["SB_camOffset",_camOffset,true];
+	[(_syncObjects select _screen),_selectionID,_ship] remoteExec ["SB_fnc_cameraCreate", 0, true];
 
 
 	
