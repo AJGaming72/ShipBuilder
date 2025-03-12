@@ -6,7 +6,6 @@
 	Arguments:
 	_self: The hitpoint
 	_ship: The ship object
-	_type: type of hitpoint for special behavior 
 	_health: Amount of health a hitpoint has
 	
 	TODO: 

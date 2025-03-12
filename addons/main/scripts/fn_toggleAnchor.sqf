@@ -23,6 +23,13 @@ if (_alive && _active) then { // If the anchor is OFF
     _ship setVariable ["SB_active", false, true];
     [_ship getVariable "SB_thrustHandler"] call CBA_fnc_removePerFrameHandler; // We remove the PFH's from outside the loop to save performance
     [_ship getVariable "SB_rotationHandler"] call CBA_fnc_removePerFrameHandler; // We remove the PFH's from outside the loop to save performance
+    private _turrets = _ship getVariable ["SB_turrets",[]];
+    {
+        // Remove the remote control from each of the turrets.
+        {
+            objNull remoteControl _x;
+        }forEach crew _x;
+    } forEach _turrets;
     systemChat "Anchored";
 } else{ if (_alive && !_active) then { // If the anchor is ON
     // _ship, _speed

@@ -10,6 +10,7 @@ class CfgFunctions {
         class escapePodAction {};
         class explosionPointRegister {};
         class hitPointRegister {};
+        class hitPointEHSetter {};
         class hitPointRegister_EH {};
         class intExplosionPointRegister {};
         class intShipDestructionEffects {};
@@ -28,6 +29,7 @@ class CfgFunctions {
         class turretSetupLocal {};
         class turretRC_EH {};
 
+
         /*
         Functions that didn't make it in
         shipThrustHandlerScheduled
@@ -44,6 +46,7 @@ class CfgFunctions {
             class teleportFromExt {};
             class teleportFromInt {};
             class triggerUpdateRot {};
+            class globalTrigger {};
         };
     };
 };

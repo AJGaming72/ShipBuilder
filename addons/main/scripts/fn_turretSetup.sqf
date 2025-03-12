@@ -18,5 +18,6 @@ if (!isServer) exitWith {};
 params ["_controller", "_turret", "_ship"];
 _controller setVariable ["SB_turret", _turret, true];
 _turret setVariable ["SB_turretAvailable",true,true];
+_turret setVariable ["SB_ship", _ship, true];
 [_controller, _turret] remoteExecCall ["SB_fnc_turretSetupLocal", 0, true];
 [_turret, _ship] call BIS_fnc_attachToRelative;

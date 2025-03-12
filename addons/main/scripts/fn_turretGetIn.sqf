@@ -10,14 +10,14 @@
 	TODO: 
 	Add an option to kill the player if the turret unit dies 
 	Forcibly stop remote controlling unit when turret / unit dies as a backup for if user gets stuck in turret.
-	Player check doesn't seem to work.
 
 	Run on player
 */
 if !(hasInterface) exitWith {};
 params ["_user", "_turret"];
-if !(_turret getVariable ["SB_turretAvailable",false]) exitWith {systemChat "Turret is not available"};
-
+private _ship = _turret getVariable "SB_ship";
+if !(_turret getVariable ["SB_turretAvailable",false]) exitWith {systemChat "Turret is not available";};
+if !(_ship getVariable "SB_active") exitWith {systemChat "Turrets safe while anchored.";};
 // Make the turret be on the correct team
 private _grp = createGroup (side _user);
 _grp deleteGroupWhenEmpty true;

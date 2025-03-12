@@ -9,15 +9,13 @@
 
 	TODO: 
 
-    FIND A BETTER WAY TO LINK TRIGGERS
-
 	Run on player
 */
 if !(hasInterface) exitWith {};
 params ["_self", "_connectedTrigger"];
 private _veh = vehicle player;
-
-if (_veh getVariable ["SB_exitedInt", false]) exitWith {};
+systemChat "going in";
+if (_veh getVariable ["SB_exitedInt", false]) exitWith {hint "attempted early enter"};
 private _triggerArea = triggerArea _self;
 private _length = _triggerArea select 0;
 private _width = _triggerArea select 1;
@@ -43,8 +41,8 @@ private _conWidth = _conTriggerArea select 1;
 private _conHeight = _conTriggerArea select 4;
 
 private _newOffset = [
-    (_offsetPercentage select 0) * _conWidth,
     (_offsetPercentage select 1) * _conLength,
+    (_offsetPercentage select 0) * _conWidth,
     (_offsetPercentage select 2) * _conHeight
 ];
 

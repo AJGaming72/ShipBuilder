@@ -8,13 +8,11 @@
 	
 	TODO: 
     wiggleRoom should be a CBA setting
-    Direction checking should be a CBA setting (For vertical hangars)
-    FIND A BETTER WAY TO LINK TRIGGERS
+    Direction checking should be a setting (For vertical hangars)
 
 	Run on player
 */
 if !(hasInterface) exitWith {};
-systemChat "Entered interior loop.";
 params ["_self", "_connectedTrigger", "_ship"];
 private _triggerCone = _self getVariable ["SB_triggerCone", -1];
 private _triggerArea = triggerArea _self;
@@ -40,15 +38,11 @@ private _wiggleRoom = 5;
 private _minBound = (360 - (_triggerCone / 2)) - _wiggleRoom;
 private _maxBound = (_triggerCone / 2) + _wiggleRoom;
 
-systemChat format["Min: %1", _minBound];
-systemChat format["Max: %1", _maxBound];
-systemChat format["Dir: %1", _dir];
 
 
 // If the player has exited outside our bounds, we don't do any more here.
-if (_dir < _minBound && _dir > _maxBound) exitWith {systemChat "Player outside of bound";}; 
+if (_dir < _minBound && _dir > _maxBound) exitWith {}; 
 
-// THIS IS SHIT AND NEEDS TO BE FIXED WHEN MADE A MOD.
 private _veh = vehicle player;
 private _ctAngle = ((triggerArea _connectedTrigger) select 2) + getDir _connectedTrigger;
 _veh setDir (_ctAngle + getDir _veh - _triggerAngle);
@@ -67,8 +61,8 @@ private _conWidth = _conTriggerArea select 1;
 private _conHeight = _conTriggerArea select 4;
 
 private _newOffset = [
-    (_offsetPercentage select 0) * _conWidth,
     (_offsetPercentage select 1) * _conLength,
+    (_offsetPercentage select 0) * _conWidth,
     (_offsetPercentage select 2) * _conHeight
 ];
 
@@ -77,13 +71,13 @@ _veh setPosASL (AGLToASL (_connectedTrigger modelToWorld _newOffset));
 private _mps = _ship getVariable ["SB_mps", 0];
 private _input = _ship getVariable ["SB_thrustInput", 0];
 private _rot = _ship getVariable ["SB_rotation", [0, 0, 0]];
-_mps = _mps * _input;
+_mps = _mps * _input / 100;
 private _pitch = rad (_rot select 1);
 private _yaw = rad (_rot select 0);
 _veh setVelocity [
-    _mps * cos (_pitch) * sin (_yaw),
-    _mps * cos (_pitch) * cos (_yaw),
-    _mps * sin (_yaw)
+    _mps * sin (_yaw),
+    _mps * cos (_yaw),
+    _mps * sin (_pitch)
 ];
 
 _veh setVariable ["SB_exitedInt", true, true];

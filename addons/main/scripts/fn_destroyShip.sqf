@@ -13,7 +13,9 @@
 if (!isServer) exitWith {};
 params ["_ship"];
 if (_ship getVariable ["SB_isDying", false]) exitWith {diag_log "Shipbuilder: Multiple ship destruction instances detected."};
-_ship setVariable ["SB_thrustCommand", 0.05, true];
+    
+if !(_ship getVariable ["SB_active", true]) then {[_ship] call SB_fnc_toggleAnchor;};
+_ship setVariable ["SB_thrustCommand", 5, true];
 _ship setVariable ["SB_rotationInput", [0, -0.25, 0], true];
 _ship setVariable ["SB_isDying", true, true];
 _ship setVariable ["SB_engineModifier", 1, true]; 

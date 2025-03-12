@@ -12,9 +12,10 @@
 	
 	TODO: 
 
-	Run on server
+	Run on player
 
 */
+if !(hasInterface) exitWith {};
 params ["_self"];
 _self addEventHandler ["HitPart", {
     [(_this select 0)] call SB_fnc_hitPointRegister_EH;

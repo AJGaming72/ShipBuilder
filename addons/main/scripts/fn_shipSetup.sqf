@@ -27,7 +27,7 @@ private _cameras = [];
 private _escapePods = [];
 private _explosionPoints = [];
 private _chairs = [];
-private _actorClass = 0; // The ship's actor.
+private _shipActor = 0;
 
 {
 	// Current result is saved in variable _x
@@ -49,13 +49,13 @@ private _actorClass = 0; // The ship's actor.
 		case "SB_hitPoint_03": {_hitPoints pushBack _x;};
 		case "SB_hitPoint_04": {_hitPoints pushBack _x;};
 		case "SB_hitPoint_05": {_hitPoints pushBack _x;};
-		default {_actorClass = typeOf _x;_ship setPosASL (getPosASL _x);deleteVehicle _x;}; // The only vehicle that should be default is the ship's actor from 3den editor.
+		default {_shipActor = _x;}; // The only vehicle that should be default is the ship's actor from 3den editor.
 	};
 } forEach _syncObjectsLogic;
-if (_actorClass isEqualTo 0) exitWith {diag_log "[SB] No ship actor created.";};
-private _shipActor = _actorClass createVehicle (getPos _ship);
-_shipActor attachTo [_ship, [0,0,0]];
+if (_shipActor isEqualTo 0) exitWith {diag_log "[SB] No ship actor found.";};
 _ship enableSimulationGlobal false;
+_ship setPosASL getPosASL _shipActor;
+_shipActor attachTo [_ship, [0,0,0]];
 _ship setVariable ["SB_shipActor", _shipActor, true];
 _shipActor setVariable ["SB_ship", _ship, true];
 _ship setVariable ["SB_alive", true, true];
@@ -65,6 +65,7 @@ _ship allowDamage false;
 private _shipName = _logic getVariable "SB_Module_shipName";
 if (_shipName isEqualTo "") exitWith {diag_log "[SB] No ship name."};
 missionNamespace setVariable [_shipName, _ship];
+publicVariable _shipName;
 
 
 private _shipTriggers = [];
@@ -74,12 +75,16 @@ private _shipTriggers = [];
 	Then, we use info from our objects the user placed in the 3den editor to find out how our trigger should be setup.
 	*/
 	// Current result is saved in variable _x
-	private _interiorTrigger = createTrigger ["EmptyDetector", [0,0,0]];
-	_interiorTrigger setPosASL (getPosASL _x); // We setPosASL after instead of setting pos here to avoid an unusual issue with height not being set properly.
+	private _interiorTrigger = createTrigger ["EmptyDetector", [0,0,0], false]; // Because this is used in other scripts, we actually need the trigger created on the server here.
+	private _pos = getPosASL _x;
+	_interiorTrigger setPosASL _pos; // We setPosASL after instead of setting pos here to avoid an unusual issue with height not being set properly.
 	private _area = _x getVariable "objectArea";
-	_interiorTrigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
-	_interiorTrigger setTriggerStatements ["vehicle player in thisList;","player setVariable ['SB_ship', " + _shipName + ", true];", "player setVariable ['SB_ship', -1, true];SB_activeCam = -1;"];
+	private _activation = ["ANYPLAYER", "PRESENT", true];
+	private _statements = ["vehicle player in thisList;","player setVariable ['SB_ship', " + _shipName + ", true];", "player setVariable ['SB_ship', -1, true];SB_activeCam = -1;"];
+	_interiorTrigger setTriggerActivation _activation;
+	_interiorTrigger setTriggerStatements _statements;
 	_interiorTrigger setTriggerArea _area;
+	[_pos, _activation, _statements, _area] remoteExecCall ["SB_fnc_globalTrigger",0,true];
 	_shipTriggers pushBack _interiorTrigger;
 } forEach _shipTriggersLogic;
 
@@ -96,38 +101,35 @@ private _shipTriggers = [];
 		private _interiorTriggers = _ship getVariable ["SB_interiorHangarTriggers", []]; 
 		private _interiorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_intHangar" + str _triggerID;
 		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + str _triggerID;
-
-		if (_name in _interiorTriggers) then {
-			diag_log "Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
+		if (_interiorName in _interiorTriggers) then {
+			diag_log "Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _interiorName;
 		};
-		private _trigger = createTrigger ["EmptyDetector", [0,0,0]]; // We setPosASL after instead of setting pos here to avoid an unusual issue with height not being set properly.
-		_trigger setPosASL (getPosASL _x);
+		private _pos = getPosASL _x;
 		private _area = _x getVariable "objectArea";
-		_trigger setTriggerArea _area;
-		_trigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
-		_trigger setTriggerStatements ["[thisList] call SB_fnc_detectPlayerVehicle;","","[thisTrigger,"+ _exteriorName +", " + _shipName + "] call SB_fnc_teleportFromInt;"];
-		missionNamespace setVariable [_interiorName, _trigger];
+		private _activation = ["ANYPLAYER", "PRESENT", true];
+		private _statements = ["[thisList] call SB_fnc_detectPlayerVehicle;","","[thisTrigger,"+ _exteriorName +", " + _shipName + "] call SB_fnc_teleportFromInt;"];
+		[_pos, _activation, _statements, _area, _interiorName] remoteExecCall ["SB_fnc_globalTrigger",0,true];
 		
 	} else {
 		private _exteriorTriggers = _ship getVariable ["SB_exteriorHangarTriggers", []]; 
 		private _interiorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_intHangar" + str _triggerID;
 		private _exteriorName = "SB_" + ((_ship call BIS_fnc_netId) regexReplace ["[:]","_"]) + "_extHangar" + str _triggerID;
 
-		if (_name in _exteriorTriggers) then {
-			diag_log "[SB] Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _name;
+		if (_exteriorName in _exteriorTriggers) then {
+			diag_log "[SB] Hangar Trigger overwritten, may cause unintended behavior. Check Hangar ID's: " + _exteriorName;
 		};
-		private _trigger = createTrigger ["EmptyDetector", [0,0,0]]; // We setPosASL after instead of setting pos here to avoid an unusual issue with height not being set properly.
-		_trigger setPosASL (getPosASL _x);
-		[_trigger, _ship] call BIS_fnc_attachToRelative;
+		private _pos = (getPosASL _x);
+		private _offset = [_ship worldToModel ASLToAGL getPosASL _x, getDir _x,_ship];
 		private _area = _x getVariable "objectArea";
-		_trigger setTriggerArea _area;
-		_trigger setTriggerActivation ["ANYPLAYER", "PRESENT", true];
-		_trigger setTriggerStatements ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;", ""];
-		missionNamespace setVariable [_exteriorName, _trigger];
+		private _activation = ["ANYPLAYER", "PRESENT", true];
+		private _statements = ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;", ""];
+		[_pos, _activation, _statements, _area, _exteriorName, _offset] remoteExecCall ["SB_fnc_globalTrigger",0,true];
+
 	};
 	
 } forEach _hangarTriggers;
 
+private _turretObjs = [];
 {
 	// Current result is saved in variable _x
 	private _syncObjects = synchronizedObjects _x;
@@ -143,8 +145,9 @@ private _shipTriggers = [];
 		}; // Using exitWith allows us to exit the forEach loop, which is slightly more efficient. Using then would just use slightly more time, no change to effect.
 	} forEach _shipTriggers; // Figure out which one is on the interior, allowing us to understand which object is the controller.
 	[(_syncObjects select _controller), (_syncObjects select _turret), _ship] call SB_fnc_turretSetup;
-
+	_turretObjs pushBack (_syncObjects select _turret);
 } forEach _turrets;
+_ship setVariable ["SB_turrets", _turretObjs, true];
 
 // This should handle the hitpoints 
 _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our variable outside of the loop so we don't do it every time.
