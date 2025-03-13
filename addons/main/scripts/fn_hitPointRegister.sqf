@@ -16,7 +16,10 @@ if (!isServer) exitWith {};
 params ["_self", "_ship", "_health"];
 _self setVariable ["SB_ship", _ship, true];
 _self setVariable ["SB_partHealth", _health, true];
-[_self, _ship] call BIS_fnc_attachToRelative;
+_self setVariable ["SB_partType", (_self getVariable "SB_Module_hitpointType"),true]; // SB_Module_hitpointType variable is local to the server machine.
+if !(_self getVariable ["SB_inside", false]) then {
+	[_self, _ship] call BIS_fnc_attachToRelative;
+};
 _self setObjectTextureGlobal [0,""];
 _self setObjectTextureGlobal [1,""];
 _self setObjectMaterialGlobal [0,""];

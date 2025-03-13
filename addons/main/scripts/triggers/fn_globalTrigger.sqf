@@ -16,7 +16,7 @@
 	Run on player
 */
 if !(hasInterface) exitWith {};
-params ["_pos","_activation","_statements","_area", ["_name",-1], ["_offset", -1]];
+params ["_pos","_activation","_statements","_area", ["_name",-1], ["_offset", -1],["_ship",-1]];
 private _trigger = createTrigger ["EmptyDetector", [0,0,0], false]; // Because this is used in other scripts, we actually need the trigger created on the server here.
 // Because module areas are measured from the CENTER, and triggers are measured from the BOTTOM, we have to offset the trigger, and then we have to double the height.
 private _heightOffset = _area select 4;
@@ -37,7 +37,11 @@ if (_offset isNotEqualTo -1) then {
     private _dir = _offset select 1;
     private _ship = _offset select 2;
     _trigger attachTo [_ship,_posOffset];
+    _trigger setVariable ["SB_posOffset", _posOffset];
     _area set [2,_dir];
+    private _hangarTriggers = _ship getVariable ["SB_exteriorHangarTriggers",[]];
+    _hangarTriggers pushBack _trigger;
+    _ship setVariable ["SB_exteriorHangarTriggers",_hangarTriggers,true];
 
     _trigger setTriggerArea _area;
 };

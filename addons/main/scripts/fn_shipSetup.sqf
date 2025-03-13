@@ -123,7 +123,7 @@ private _shipTriggers = [];
 		private _area = _x getVariable "objectArea";
 		private _activation = ["ANYPLAYER", "PRESENT", true];
 		private _statements = ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;", ""];
-		[_pos, _activation, _statements, _area, _exteriorName, _offset] remoteExecCall ["SB_fnc_globalTrigger",0,true];
+		[_pos, _activation, _statements, _area, _exteriorName, _offset,_ship] remoteExecCall ["SB_fnc_globalTrigger",0,true];
 
 	};
 	
@@ -158,14 +158,19 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	Finally, we register the hitpoint with our function
 	This only accounts for the Engine hitpoint type right now.
 	*/
+	private _hitpoint = _x;
 	private _engines = _ship getVariable ["SB_numEngines", 0];
-	private _health = _x getVariable ["SB_Module_hitpointHealth", 10000];
-	private _type = _x getVariable ["SB_module_hitpointType", 'ENGINE'];
+	private _health = _hitpoint getVariable ["SB_Module_hitpointHealth", 10000];
+	private _type = _hitpoint getVariable ["SB_module_hitpointType", 'ENGINE'];
 	if (_type == "ENGINE") then {
 		_ship setVariable ["SB_numEngines", (_engines + 1), true];
-
 	};
-	[_x, _ship, _health] call SB_fnc_hitPointRegister;
+	{
+	if (_hitpoint inArea _x) exitWith {
+		_hitpoint setVariable ["SB_inside", true, true];
+	};
+	} forEach _shipTriggers;
+	[_hitpoint, _ship, _health] call SB_fnc_hitPointRegister;
 } forEach (_hitpoints);
 
 // Marker setup
@@ -256,6 +261,7 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	// screen, _selectionID, camera, ship;
 	sleep 1; // The camera needs time for other stuff to initialize first.
 	private _camOffset = [_ship worldToModel ASLToAGL getPosASL (_syncObjects select _cam), [(_syncObjects select _cam), _ship, true] call BIS_fnc_vectorDirAndUpRelative];
+	deleteVehicle (_syncObjects select _cam);
 	(_syncObjects select _screen) setVariable ["SB_camOffset",_camOffset,true];
 	[(_syncObjects select _screen),_selectionID,_ship] remoteExec ["SB_fnc_cameraCreate", 0, true];
 

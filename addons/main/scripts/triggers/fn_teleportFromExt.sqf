@@ -14,8 +14,7 @@
 if !(hasInterface) exitWith {};
 params ["_self", "_connectedTrigger"];
 private _veh = vehicle player;
-systemChat "going in";
-if (_veh getVariable ["SB_exitedInt", false]) exitWith {hint "attempted early enter"};
+if (_veh getVariable ["SB_exitedInt", false]) exitWith {};
 private _triggerArea = triggerArea _self;
 private _length = _triggerArea select 0;
 private _width = _triggerArea select 1;
@@ -29,7 +28,7 @@ _veh setDir (_ctAngle + getDir _veh - _triggerAngle);
 private _offset = _self worldToModel ASLToAGL getPosASL _veh;
 // Width, Length, Height
 private _offsetPercentage = [
-    ((_offset select 0) / _width) * -1,// These values become inverted during the teleport
+    ((_offset select 0) / _width),// These values become inverted during the teleport
     ((_offset select 1) / _length) * -1,// These values become inverted during the teleport
     (_offset select 2) / _height
     ];

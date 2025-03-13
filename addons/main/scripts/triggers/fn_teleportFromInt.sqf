@@ -14,6 +14,8 @@
 */
 if !(hasInterface) exitWith {};
 params ["_self", "_connectedTrigger", "_ship"];
+if (isNil "_self") exitWith {systemChat "Unknown trigger error! Logging trigger."; diag_log ("[SB] " + (str _self))};
+if (isNil "_connectedTrigger") exitWith {systemChat "Unknown trigger error! Logging trigger."; diag_log ("[SB] " + (str _connectedTrigger))};
 private _triggerCone = _self getVariable ["SB_triggerCone", -1];
 private _triggerArea = triggerArea _self;
 private _triggerAngle = _triggerArea select 2;
@@ -44,14 +46,14 @@ private _maxBound = (_triggerCone / 2) + _wiggleRoom;
 if (_dir < _minBound && _dir > _maxBound) exitWith {}; 
 
 private _veh = vehicle player;
-private _ctAngle = ((triggerArea _connectedTrigger) select 2) + getDir _connectedTrigger;
+private _ctAngle = ((triggerArea _connectedTrigger) select 2);
 _veh setDir (_ctAngle + getDir _veh - _triggerAngle);
 
 private _offset = _self worldToModel ASLToAGL getPosASL _veh;
 // Width, Length, Height
 private _offsetPercentage = [
-    ((_offset select 0) / _width) * -1,// These values become inverted during the teleport
-    ((_offset select 1) / _length) * -1,// These values become inverted during the teleport
+    ((_offset select 0) / _width) * -1,// This value becomes inverted during the teleport
+    ((_offset select 1) / _length),
     (_offset select 2) / _height
     ];
 
@@ -72,8 +74,8 @@ private _mps = _ship getVariable ["SB_mps", 0];
 private _input = _ship getVariable ["SB_thrustInput", 0];
 private _rot = _ship getVariable ["SB_rotation", [0, 0, 0]];
 _mps = _mps * _input / 100;
-private _pitch = rad (_rot select 1);
-private _yaw = rad (_rot select 0);
+private _pitch =_rot select 1;
+private _yaw =_rot select 0;
 _veh setVelocity [
     _mps * sin (_yaw),
     _mps * cos (_yaw),

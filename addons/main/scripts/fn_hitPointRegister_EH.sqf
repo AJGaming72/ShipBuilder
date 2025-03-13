@@ -25,7 +25,7 @@ _health = _health - _damage;
 _target setVariable ["SB_partHealth", _health, true];
 
 if (_health <= 0) then {
-	private _type = _target getVariable ["SB_Module_hitpointType", "ENGINE"]; // Part type is always uppercase.
+	private _type = _target getVariable ["SB_partType", "ENGINE"]; // Part type is always uppercase.
 	switch (_type) do {
 		case "ENGINE": {
 			private _engineModifier = _ship getVariable ["SB_engineModifier", 1];
@@ -37,7 +37,7 @@ if (_health <= 0) then {
 			[_fire,_ship] call BIS_fnc_attachToRelative;
 		};
 		case "CORE": {
-			[_ship] spawn SB_fnc_destroyShip;
+			[_ship] remoteExec ["SB_fnc_destroyShip",2,false]; // Spawn this function on the server
 		};
 		                // case "shield": {};
 		                // case "cockpit": {};

@@ -41,6 +41,7 @@ _cam cameraEffect ["Internal", "Back", "sbrtactivecam"];
 
 
 private _trg = createTrigger ["EmptyDetector", getPos _screen];
+_trg setPosASL (getPosASL _screen);
 _trg setTriggerArea [5, 5, 0, false];
 _trg setTriggerInterval 1;
 _trg setVariable ["SB_camera", _cam];
