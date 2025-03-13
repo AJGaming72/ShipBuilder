@@ -203,6 +203,7 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 
 {
 	private _syncObjects = synchronizedObjects _x;
+	_syncObjects deleteAt (_syncObjects find _logic); // This should mean we only have one item in our array, the ship controller.
 	private _escapePod = 1;
 	private _pointMarker = 0;
 	{
