@@ -47,6 +47,8 @@ class CfgFunctions {
             class teleportFromInt {};
             class triggerUpdateRot {};
             class globalTrigger {};
+            class anchorOn {};
+            class anchorOff {};
         };
     };
 };

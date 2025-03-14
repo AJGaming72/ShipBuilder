@@ -48,11 +48,11 @@ if (_dir < _minBound && _dir > _maxBound) exitWith {};
 private _veh = vehicle player;
 private _ctAngle = ((triggerArea _connectedTrigger) select 2);
 _veh setDir (_ctAngle + getDir _veh - _triggerAngle);
-
-private _offset = _self worldToModel ASLToAGL getPosASL _veh;
+private _selfArrow = _self getVariable "SB_arrow";
+private _offset = _selfArrow worldToModel ASLToAGL getPosASL _veh;
 // Width, Length, Height
 private _offsetPercentage = [
-    ((_offset select 0) / _width) * -1,// This value becomes inverted during the teleport
+    ((_offset select 0) / _width),
     ((_offset select 1) / _length),
     (_offset select 2) / _height
     ];
@@ -63,12 +63,12 @@ private _conWidth = _conTriggerArea select 1;
 private _conHeight = _conTriggerArea select 4;
 
 private _newOffset = [
-    (_offsetPercentage select 1) * _conLength,
     (_offsetPercentage select 0) * _conWidth,
+    (_offsetPercentage select 1) * _conLength,
     (_offsetPercentage select 2) * _conHeight
 ];
-
-_veh setPosASL (AGLToASL (_connectedTrigger modelToWorld _newOffset));
+private _connectedArrow = _connectedTrigger getVariable "SB_arrow";
+_veh setPosASL (AGLToASL (_connectedArrow modelToWorld _newOffset));
 
 private _mps = _ship getVariable ["SB_mps", 0];
 private _input = _ship getVariable ["SB_thrustInput", 0];

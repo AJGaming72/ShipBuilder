@@ -16,13 +16,17 @@
 	Run on player
 */
 if !(hasInterface) exitWith {};
-params ["_pos","_activation","_statements","_area", ["_name",-1], ["_offset", -1],["_ship",-1]];
+params ["_module", "_pos","_activation","_statements","_area", ["_name",-1], ["_offset", -1],["_ship",-1]];
 private _trigger = createTrigger ["EmptyDetector", [0,0,0], false]; // Because this is used in other scripts, we actually need the trigger created on the server here.
 // Because module areas are measured from the CENTER, and triggers are measured from the BOTTOM, we have to offset the trigger, and then we have to double the height.
 private _heightOffset = _area select 4;
 _pos = [_pos select 0, _pos select 1, (_pos select 2) - _heightOffset];
 _area set [4, _heightOffset*2];
-
+private _arrow = "Sign_Arrow_Direction_F" createVehicleLocal [0,0,0]; 
+_arrow setPosASL (_pos vectorAdd [0,0,_heightOffset]);
+_arrow setDir (_area select 2);
+_arrow setObjectTexture [0,""];
+_trigger setVariable ["SB_arrow", _arrow, false];
 _trigger setPosASL _pos;
 _trigger setTriggerActivation _activation;
 _trigger setTriggerStatements _statements;
@@ -39,9 +43,11 @@ if (_offset isNotEqualTo -1) then {
     _trigger attachTo [_ship,_posOffset];
     _trigger setVariable ["SB_posOffset", _posOffset];
     _area set [2,_dir];
+    _arrow setDir (_area select 2);
+    [_arrow, _trigger] call BIS_fnc_attachToRelative;
     private _hangarTriggers = _ship getVariable ["SB_exteriorHangarTriggers",[]];
-    _hangarTriggers pushBack _trigger;
-    _ship setVariable ["SB_exteriorHangarTriggers",_hangarTriggers,true];
+    _hangarTriggers pushBackUnique _trigger;
+    _ship setVariable ["SB_exteriorHangarTriggers",_hangarTriggers];
 
     _trigger setTriggerArea _area;
 };

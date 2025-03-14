@@ -84,7 +84,7 @@ private _shipTriggers = [];
 	_interiorTrigger setTriggerActivation _activation;
 	_interiorTrigger setTriggerStatements _statements;
 	_interiorTrigger setTriggerArea _area;
-	[_pos, _activation, _statements, _area] remoteExecCall ["SB_fnc_globalTrigger",0,true];
+	[_x, _pos, _activation, _statements, _area] remoteExecCall ["SB_fnc_globalTrigger",0,true];
 	_shipTriggers pushBack _interiorTrigger;
 } forEach _shipTriggersLogic;
 
@@ -108,7 +108,7 @@ private _shipTriggers = [];
 		private _area = _x getVariable "objectArea";
 		private _activation = ["ANYPLAYER", "PRESENT", true];
 		private _statements = ["[thisList] call SB_fnc_detectPlayerVehicle;","","[thisTrigger,"+ _exteriorName +", " + _shipName + "] call SB_fnc_teleportFromInt;"];
-		[_pos, _activation, _statements, _area, _interiorName] remoteExecCall ["SB_fnc_globalTrigger",0,true];
+		[_x, _pos, _activation, _statements, _area, _interiorName] remoteExecCall ["SB_fnc_globalTrigger",0,true];
 		
 	} else {
 		private _exteriorTriggers = _ship getVariable ["SB_exteriorHangarTriggers", []]; 
@@ -123,7 +123,7 @@ private _shipTriggers = [];
 		private _area = _x getVariable "objectArea";
 		private _activation = ["ANYPLAYER", "PRESENT", true];
 		private _statements = ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;", ""];
-		[_pos, _activation, _statements, _area, _exteriorName, _offset,_ship] remoteExecCall ["SB_fnc_globalTrigger",0,true];
+		[_x, _pos, _activation, _statements, _area, _exteriorName, _offset,_ship] remoteExecCall ["SB_fnc_globalTrigger",0,true];
 
 	};
 	

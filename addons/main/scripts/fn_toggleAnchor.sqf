@@ -19,9 +19,7 @@ if ((_ship getVariable ["SB_rotationInput", [0,0,0]]) isNotEqualTo [0,0,0]) exit
 private _alive = _ship getVariable ["SB_alive", false];
 private _active = _ship getVariable ["SB_active", false];
 if (_alive && _active) then { // If the anchor is OFF
-    {
-        detach _x;
-    } forEach (_ship getVariable ["SB_exteriorHangarTriggers",[]]); // Detach the triggers so they can still be active
+    [_ship] remoteExecCall ["SB_fnc_anchorOn",0,true];
 
     _ship enableSimulationGlobal false; // So our ship stops in place.
     _ship setVariable ["SB_active", false, true];
@@ -38,13 +36,9 @@ if (_alive && _active) then { // If the anchor is OFF
 } else{ if (_alive && !_active) then { // If the anchor is ON
     // _ship, _speed
     _ship enableSimulationGlobal true; // Allow the attached objects to follow our ship
-    {
-        private _posOffset = _x getVariable ["SB_posOffset",[0,0,0]];
-        _x attachTo [_ship, _posOffset];
-    } forEach (_ship getVariable ["SB_exteriorHangarTriggers",[]]); // Reattach the triggers so they follow the ship
-
+    [_ship] remoteExecCall ["SB_fnc_anchorOff",0,true];
     _ship setVariable ["SB_active", true, true];
-    [_ship, _ship getVariable ["SB_shipSpeed",120]] call SB_fnc_shipThrustHandler;
-    [_ship, _ship getVariable ["SB_shipRotationSpeed",3]] call SB_fnc_shipRotationHandler;
+    [_ship, _ship getVariable ["SB_shipSpeed",120]] remoteExecCall ["SB_fnc_shipThrustHandler",2,false];
+    [_ship, _ship getVariable ["SB_shipRotationSpeed",3]] remoteExecCall ["SB_fnc_shipRotationHandler",2,false];
     systemChat "Anchor Removed";
 };};
