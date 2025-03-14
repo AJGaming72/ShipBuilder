@@ -33,7 +33,6 @@ _trigger setTriggerStatements _statements;
 _trigger setTriggerArea _area;
 if (_name isNotEqualTo -1) then {
     missionNamespace setVariable [_name, _trigger,false];
-    publicVariable _name;
 };
 if (_offset isNotEqualTo -1) then {
     private _posOffset = _offset select 0;
