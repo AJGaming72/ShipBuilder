@@ -21,3 +21,4 @@ _turret setVariable ["SB_turretAvailable",true,true];
 _turret setVariable ["SB_ship", _ship, true];
 [_controller, _turret] remoteExecCall ["SB_fnc_turretSetupLocal", 0, true];
 [_turret, _ship] call BIS_fnc_attachToRelative;
+_turret enableSimulationGlobal true;

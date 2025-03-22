@@ -1,0 +1,4 @@
+- When no AI in the ship, user can get stuck. (only happens on server?)
+- Check if hitpoints work while anchored (enableSimulation)
+- Fires go out when anchored
+- Add option for turning the ship off axis from the actor

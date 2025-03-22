@@ -1,5 +1,14 @@
 class CfgVehicles {
 	/*
+		UNITS
+	*/
+	class B_RangeMaster_F;
+	class SB_turretAI : B_RangeMaster_F {
+		displayName = "Turret AI";
+		scope = 1;
+		scopeCurator = 1;
+	};
+	/*
 		VEHICLES
 	*/
 	class Land_VR_Block_01_F;

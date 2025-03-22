@@ -10,10 +10,7 @@
 // Yaw, pitch, Roll
 	
 	TODO: 
-	Interval should be a CBA setting
-	Input should be keybinds via CBA
-	Add "ANCHOR" mode so ship's script isn't constantly running.
-	Make this a PFH
+	
 	Run on Server
 */
 if (!isServer) exitWith {};

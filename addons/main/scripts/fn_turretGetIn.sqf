@@ -19,28 +19,41 @@ private _ship = _turret getVariable "SB_ship";
 if !(_turret getVariable ["SB_turretAvailable",false]) exitWith {systemChat "Turret is not available";};
 if !(_ship getVariable "SB_active") exitWith {systemChat "Turrets safe while anchored.";};
 // Make the turret be on the correct team
-private _grp = createGroup (side _user);
-_grp deleteGroupWhenEmpty true;
-[_turret] joinSilent _grp;
+private _side = side player;
 // if the turret does not have a crew, we need to add it
+private _unit = 0; // Instantiate this variable so we can use it outside of the scope of the if
+private _grp = createGroup (side player);
 if (count (crew _turret) == 0) then {
-	// Create a unit and put them in our group
-	private _unit = _grp createUnit ["C_man_1", [0, 0, 0], [], 0, "NONE"];
-	[_unit] joinSilent _grp;
-	_unit moveInAny _turret;
-	// if the user exits the turret, we can just kill their unit.
-	private _handle = _turret addEventHandler ["GetOut", {
-		params ["_vehicle", "_role", "_unit", "_turret", "_isEject"];
-		_unit setDamage 1;
-		deleteVehicle _unit;
-	}];
-	_turret setVariable ["SB_turretRCHandler", _handle];
-	_unit setUnitLoadout getUnitLoadout _user; // Make the unit look like our user
-};
+	_unit = _grp createUnit ["SB_turretAI", [0,0,0], [], 0, "NONE"];
+	_unit moveInGunner _turret;
+} else {
+	_unit = ((crew _turret) select 0);
+};// createVehicleCrew gave me some issues here. Didn't seem to like transferring the Unit along the network?
+[_unit] joinSilent _grp;
+private _handle = _turret addEventHandler ["GetOut", {
+	params ["_vehicle", "_role", "_unit", "_turret", "_isEject"];
+	player remoteControl objNull;
+	switchCamera player;
+	// Just remove the RC
+}];
+// If user opens zeus while we are remote controlling, it can break the RC. 
+private _zHandle = findDisplay 46 displayAddEventHandler ["KeyDown", {
+	if (inputAction "CuratorInterface" > 0) then
+	{
+			player remoteControl objNull;
+			switchCamera player;
+	};
+	false
+}];
 
-// Actually remoteControl the turret
+_turret setVariable ["SB_turretRCHandler", _handle];
+_turret setVariable ["SB_turretZHandler", _zHandle];
+_turret setVariable ["SB_turretUnit", _unit, true];
+_unit setUnitLoadout getUnitLoadout _user; // Make the unit look like our user
+
 _turret setVariable ["SB_turretAvailable", false, true];
-_turret switchCamera "INTERNAL";
-_user remoteControl ((crew _turret) select 0);
+// Actually remoteControl the turret
+_unit switchCamera "INTERNAL";
+_user remoteControl _unit;
 // We add a function to check if the user stops remote controlling. unfortunately, there is NOT an event handler for this. :(
 [_turret] spawn SB_fnc_turretRC_EH;

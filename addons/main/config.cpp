@@ -8,6 +8,8 @@ class CfgPatches {
 		url = "https://github.com/AJGaming72/ShipBuilder";
 
 		units[] = {
+			// Units
+			"SB_turretAI",
 			// Points
 			"SB_explosionPoint",
 			"SB_hitPoint_01",
