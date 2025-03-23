@@ -32,6 +32,11 @@ if (_alive && _active) then { // If the anchor is OFF
             objNull remoteControl _x;
         }forEach crew _x;
     } forEach _turrets;
+
+    {
+        detach _x;
+    } forEach (_ship getVariable ["SB_fires",[]]); // Detach our fires so that they can actually be seen when we are anchored
+
     systemChat "Anchored";
 } else{ if (_alive && !_active) then { // If the anchor is ON
     // _ship, _speed
@@ -40,5 +45,8 @@ if (_alive && _active) then { // If the anchor is OFF
     _ship setVariable ["SB_active", true, true];
     [_ship, _ship getVariable ["SB_shipSpeed",120]] remoteExecCall ["SB_fnc_shipThrustHandler",2,false];
     [_ship, _ship getVariable ["SB_shipRotationSpeed",3]] remoteExecCall ["SB_fnc_shipRotationHandler",2,false];
+    {
+        [_x,_ship] call BIS_fnc_attachToRelative;
+    } forEach (_ship getVariable ["SB_fires",[]]); // Reattach the Fires so they follow the ship
     systemChat "Anchor Removed";
 };};

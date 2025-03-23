@@ -21,7 +21,6 @@ _ship setVariable ["SB_mps", _mps, true];
 _ship setVariable ["SB_thrustInput", 0, true]; // Actual speed of ship
 _ship setVariable ["SB_thrustCommand", 0, true]; // Commanded speed of ship
 _ship setVariable ["SB_thrustStep", 2, true]; // 2 is the stop command
-_ship setVariable ["SB_engineModifier", 1, true]; // 2 is the stop command
 private _handle = [{
 	params ["_args", "_handle"];
 	_args params ["_ship", "_distPerTick", "_pos"];

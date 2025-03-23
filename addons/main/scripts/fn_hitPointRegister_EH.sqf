@@ -34,6 +34,7 @@ if (_health <= 0) then {
 			private _fires = _ship getVariable ["SB_fires", []];
     		private _fire = createVehicle ["test_EmptyObjectForFireBig", (getPosATL _target), [], 0, "CAN_COLLIDE"];
 			_fires pushBack _fire;
+			_ship setVariable ["SB_fires",_fires];
 			[_fire,_ship] call BIS_fnc_attachToRelative;
 		};
 		case "CORE": {
