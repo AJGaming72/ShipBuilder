@@ -1,4 +1,5 @@
 - User getting stuck in turret - FIXED
-- Check if hitpoints work while anchored (enableSimulation)
-- Fires go out when anchored
-- Add option for turning the ship off axis from the actor
+- Check if hitpoints work while anchored (enableSimulation) - FIXED
+- Fires go out when anchored - FIXED
+- Add option for turning the ship off axis from the actor - COMPLETE
+- Objects not attaching perfectly

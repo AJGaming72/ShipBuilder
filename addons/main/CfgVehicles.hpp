@@ -232,6 +232,14 @@ class CfgVehicles {
 				validate = "number";
 				defaultValue = 3;
 			};
+			class SB_module_shipDirOffset : Edit {
+				property = "SB_module_shipDirOffset";
+				displayName = "Ship Direction Offset";
+				tooltip = "How far should the ship's actor be offset from the ship?";
+				typeName = "NUMBER";
+				validate = "number";
+				defaultValue = 0;
+			};
 		};
 	};
 	class SB_Module_shipChair : Module_F {

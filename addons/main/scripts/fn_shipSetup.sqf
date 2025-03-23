@@ -55,7 +55,9 @@ private _shipActor = 0;
 if (_shipActor isEqualTo 0) exitWith {diag_log "[SB] No ship actor found.";};
 _ship enableSimulationGlobal false;
 _ship setPosASL getPosASL _shipActor;
-_shipActor attachTo [_ship, [0,0,0]];
+private _shipDirOffset = _logic getVariable ["SB_module_shipDirOffset",0];
+_ship setDir ((getDir _shipActor) + _shipDirOffset);
+[_shipActor, _ship] call BIS_fnc_attachToRelative;
 _ship setVariable ["SB_shipActor", _shipActor, true];
 _shipActor setVariable ["SB_ship", _ship, true];
 _ship setVariable ["SB_alive", true, true];
@@ -84,7 +86,11 @@ private _shipTriggers = [];
 	_interiorTrigger setTriggerActivation _activation;
 	_interiorTrigger setTriggerStatements _statements;
 	_interiorTrigger setTriggerArea _area;
-	[_x, _pos, _activation, _statements, _area] remoteExecCall ["SB_fnc_globalTrigger",0,true];
+	private _arrow = "Sign_Arrow_Direction_F" createVehicle [0,0,0]; 
+	_arrow setPosASL _pos;
+	_arrow setDir (_area select 2);
+	_arrow setObjectTextureGlobal [0,""];
+	[_x,_arrow, _pos, _activation, _statements, _area] remoteExecCall ["SB_fnc_globalTrigger",0,true];
 	_shipTriggers pushBack _interiorTrigger;
 } forEach _shipTriggersLogic;
 
@@ -108,7 +114,11 @@ private _shipTriggers = [];
 		private _area = _x getVariable "objectArea";
 		private _activation = ["ANYPLAYER", "PRESENT", true];
 		private _statements = ["[thisList] call SB_fnc_detectPlayerVehicle;","","[thisTrigger,"+ _exteriorName +", " + _shipName + "] call SB_fnc_teleportFromInt;"];
-		[_x, _pos, _activation, _statements, _area, _interiorName] remoteExecCall ["SB_fnc_globalTrigger",0,true];
+		private _arrow = "Sign_Arrow_Direction_F" createVehicle [0,0,0]; 
+		_arrow setPosASL _pos;
+		_arrow setDir (_area select 2);
+		_arrow setObjectTextureGlobal [0,""];
+		[_x,_arrow, _pos, _activation, _statements, _area, _interiorName] remoteExecCall ["SB_fnc_globalTrigger",0,true];
 		
 	} else {
 		private _exteriorTriggers = _ship getVariable ["SB_exteriorHangarTriggers", []]; 
@@ -123,7 +133,11 @@ private _shipTriggers = [];
 		private _area = _x getVariable "objectArea";
 		private _activation = ["ANYPLAYER", "PRESENT", true];
 		private _statements = ["[thisTrigger] call SB_fnc_triggerUpdateRot;[thisList] call SB_fnc_detectPlayerVehicle;","[thisTrigger,"+_interiorName+"] call SB_fnc_teleportFromExt;", ""];
-		[_x, _pos, _activation, _statements, _area, _exteriorName, _offset,_ship] remoteExecCall ["SB_fnc_globalTrigger",0,true];
+		private _arrow = "Sign_Arrow_Direction_F" createVehicle [0,0,0]; 
+		_arrow setPosASL _pos;
+		_arrow setDir (_area select 2);
+		_arrow setObjectTextureGlobal [0,""];
+		[_x,_arrow, _pos, _activation, _statements, _area, _exteriorName, _offset,_ship] remoteExecCall ["SB_fnc_globalTrigger",0,true];
 
 	};
 	
@@ -248,6 +262,18 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	(_syncObjects select 0) setVariable ["SB_chair", true, true];
 } forEach _chairs;
 
+
+
+// This way nothing gets thrown off in the loading process.
+_ship enableSimulationGlobal true;
+private _shipSpeed = _logic getVariable ["SB_Module_shipSpeed", 120];
+private _shipRotationSpeed = _logic getVariable ["SB_module_shipRotationSpeed", 3];
+_ship setVariable ["SB_shipSpeed", _shipSpeed, true];
+_ship setVariable ["SB_shipRotationSpeed", _shipRotationSpeed, true];
+_ship setVariable ["SB_active", true, true];
+[_ship, _shipSpeed] call SB_fnc_shipThrustHandler;
+[_ship, _shipRotationSpeed] call SB_fnc_shipRotationHandler;
+// Needs attachTo to go off first
 {
 
 	private _selectionID = _x getVariable "SB_module_selectionID";
@@ -272,13 +298,3 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 
 	
 } forEach _cameras;
-
-// This way nothing gets thrown off in the loading process.
-_ship enableSimulationGlobal true;
-private _shipSpeed = _logic getVariable ["SB_Module_shipSpeed", 120];
-private _shipRotationSpeed = _logic getVariable ["SB_module_shipRotationSpeed", 3];
-_ship setVariable ["SB_shipSpeed", _shipSpeed, true];
-_ship setVariable ["SB_shipRotationSpeed", _shipRotationSpeed, true];
-_ship setVariable ["SB_active", true, true];
-[_ship, _shipSpeed] call SB_fnc_shipThrustHandler;
-[_ship, _shipRotationSpeed] call SB_fnc_shipRotationHandler;
