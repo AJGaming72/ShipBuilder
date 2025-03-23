@@ -164,6 +164,9 @@ _ship setVariable ["SB_numEngines", 0, true]; // We need to initialize our varia
 	private _type = _hitpoint getVariable ["SB_module_hitpointType", 'ENGINE'];
 	if (_type == "ENGINE") then {
 		_ship setVariable ["SB_numEngines", (_engines + 1), true];
+		private _engines = _ship getVariable ["SB_engines", []];
+		_engines pushBackUnique _x;
+		_ship setVariable ["SB_engines", _engines]; 
 	};
 	{
 	if (_hitpoint inArea _x) exitWith {

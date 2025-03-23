@@ -29,8 +29,20 @@ if (_health <= 0) then {
 	switch (_type) do {
 		case "ENGINE": {
 			private _engineModifier = _ship getVariable ["SB_engineModifier", 1];
-			private _numEngines = _ship getVariable ["SB_numEngines", 1];
-			_ship setVariable ["SB_engineModifier", (_engineModifier - (1 / _numEngines)), true]; 
+			private _numEnginesOrig = _ship getVariable ["SB_numEngines", 1];
+			private _engines = _ship getVariable ["SB_engines", []];
+			if (_target in _engines) then { // In the case we somehow get multiple executions in the same frame
+				_engines deleteAt (_engines find _target);
+				_ship setVariable ["SB_engines", _engines, true];
+			};
+			private _numEngines = count _engines;
+			private _newModifier = 1;
+			if (_numEngines isEqualTo 0) then {
+				_newModifier = 0;
+			} else {
+				_newModifier = (_numEngines / _numEnginesOrig);
+			};
+			_ship setVariable ["SB_engineModifier", _newModifier, true]; 
 			private _fires = _ship getVariable ["SB_fires", []];
     		private _fire = createVehicle ["test_EmptyObjectForFireBig", (getPosATL _target), [], 0, "CAN_COLLIDE"];
 			_fires pushBack _fire;
